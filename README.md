@@ -1,2 +1,44 @@
-# cs122b-spring20-project1-api-example
-frontend-backend separation example using Java servlet + jQuery
+## CS 122B Project 1 API example
+
+This example shows how frontend and backend are separated by implementing a star list page and a single star page with movie list.
+
+### To run this example: 
+1. clone this repository using `git clone https://github.com/UCI-Chenli-teaching/cs122b-spring20-project1-api-example.git`
+2. Open IntelliJ -> Import Project -> Choose the project you just cloned (The root path must contain the pom.xml!) -> Choose Import project from external model -> choose Maven -> Click on Finish -> The IntelliJ will load automatically
+3. For "Root Directory", right click "cs122b-spring20-project1-api-example" -> Mark Directory as -> sources root
+4. In `WebContent/META-INF/context.xml`, make sure the mysql username is `mytestuser` and password is `mypassword`.
+5. Also make sure you have the `moviedbexample` database.
+6. Make sure mysql and tomcat are started.
+7. To run the example, follow the instructions in [canvas](https://canvas.eee.uci.edu/courses/26486/pages/intellij-idea-tomcat-configuration)
+
+### Brief Explanation
+- `StarsServlet.java` is a Java servlet that talks to the database and get the stars. It returns a list of stars in the JSON format. 
+The name of star is generated as a link to Single Star page.
+
+- `index.js` is the main Javascript file that initiates an HTTP GET request to the `StarsServlet`. After the response is returned, `index.js` populates the table using the data it gets.
+
+- `index.html` is the main HTML file that imports jQuery, Bootstrap, and `index.js`. It also contains the initial skeleton for the table.
+
+- `SingleStarServlet.java` is a Java servlet that talks to the database and get information about one Star and all the movie this Star performed. It returns a list of Movies in the JSON format. 
+
+- `single-star.js` is the Javascript file that initiates an HTTP GET request to the `SingleStarServlet`. After the response is returned, `single-star.js` populates the table using the data it gets.
+
+- `single-star.html` is the HTML file that imports jQuery, Bootstrap, and `single-star.js`. It also contains the initial skeleton for the movies table.
+
+### Separating frontend and backend
+- For project 1, you are recommended to separate frontend and backend. Backend Java Servlet only provides API in JSON format. Frontend Javascript code fetches the data through HTTP (ajax) requests and then display the data on the webpage. 
+
+- This example uses `jQuery` for making HTTP requests and manipulate DOM. jQuery is relatively easy to learn compared to other frameworks. This example also includes `Bootstrap`, a popular UI framework to let you easily make your webpage look fancy. 
+
+- You are free to use any technology/tool/framework you want. The backend language must be Java.
+
+
+### DataSource
+- For project 1, you are recommended to use tomcat to manage your DataSource instead of manually define MySQL connection in each of the servlet.
+
+- `WebContent/META-INF/context.xml` contains a DataSource, with database information stored in it.
+`WEB-INF/web.xml` registers the DataSource to name jdbc/moviedbexample, which could be referred to anywhere in the project.
+
+- In both `SingleStarServlet.java` and `StarsServlet.java`, a private DataSource reference dataSource is created with `@Resource` annotation. It is a reference to the DataSource `jdbc/moviedbexample` we registered in `web.xml`
+
+- To use DataSource, you can create a new connection to it by `dataSource.getConnection()`, and you can use the connection as previous examples.
