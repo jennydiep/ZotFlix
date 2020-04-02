@@ -30,8 +30,6 @@ The name of star is generated as a link to Single Star page.
 
 - This example uses `jQuery` for making HTTP requests and manipulate DOM. jQuery is relatively easy to learn compared to other frameworks. This example also includes `Bootstrap`, a popular UI framework to let you easily make your webpage look fancy. 
 
-- You are free to use any technology/tool/framework you want. The backend language must be Java.
-
 
 ### DataSource
 - For project 1, you are recommended to use tomcat to manage your DataSource instead of manually define MySQL connection in each of the servlet.
