@@ -3,7 +3,7 @@
 This example shows how frontend and backend are separated by implementing a star list page and a single star page with movie list.
 
 ### To run this example: 
-1. clone this repository using `git clone https://github.com/UCI-Chenli-teaching/cs122b-spring20-project1-api-example.git`
+1. Clone this repository using `git clone https://github.com/UCI-Chenli-teaching/cs122b-spring20-project1-api-example.git`
 2. Open IntelliJ -> Import Project -> Choose the project you just cloned (The root path must contain the pom.xml!) -> Choose Import project from external model -> choose Maven -> Click on Finish -> The IntelliJ will load automatically
 3. For "Root Directory", right click "cs122b-spring20-project1-api-example" -> Mark Directory as -> sources root
 4. In `WebContent/META-INF/context.xml`, make sure the mysql username is `mytestuser` and password is `mypassword`.
