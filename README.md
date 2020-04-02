@@ -8,8 +8,7 @@ This example shows how frontend and backend are separated by implementing a star
 3. For "Root Directory", right click "cs122b-spring20-project1-api-example" -> Mark Directory as -> sources root
 4. In `WebContent/META-INF/context.xml`, make sure the mysql username is `mytestuser` and password is `mypassword`.
 5. Also make sure you have the `moviedbexample` database.
-6. Make sure mysql and tomcat are started.
-7. To run the example, follow the instructions in [canvas](https://canvas.eee.uci.edu/courses/26486/pages/intellij-idea-tomcat-configuration)
+6. To run the example, follow the instructions in [canvas](https://canvas.eee.uci.edu/courses/26486/pages/intellij-idea-tomcat-configuration)
 
 ### Brief Explanation
 - `StarsServlet.java` is a Java servlet that talks to the database and get the stars. It returns a list of stars in the JSON format. 
