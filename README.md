@@ -2,6 +2,28 @@
 
 This example shows how frontend and backend are separated by implementing a star list page and a single star page with movie list.
 
+### Before running the example, prepare the `moviedbexample` to have two additional tables: 
+```
+local> mysql -u mytestuser -p
+mysql> use moviedbexample;
+mysql> CREATE TABLE movies(
+       	id VARCHAR(10) DEFAULT '',
+       	title VARCHAR(100) DEFAULT '',
+       	year INTEGER NOT NULL,
+       	director VARCHAR(100) DEFAULT '',
+       	PRIMARY KEY (id)
+       );
+mysql> CREATE TABLE stars_in_movies(
+       	starId VARCHAR(10) DEFAULT '',
+       	movieId VARCHAR(10) DEFAULT '',
+       	FOREIGN KEY (starId) REFERENCES stars(id),
+       	FOREIGN KEY (movieId) REFERENCES movies(id)
+       );
+mysql> INSERT INTO movies VALUES('1234', 'Coming To America', 1988, 'John Landis');
+mysql> INSERT INTO movies VALUES('3333', 'Frozen', 2013, 'Chris Buck');
+mysql> INSERT INTO stars_in_movies VALUES('755017', '1234');
+```
+
 ### To run this example: 
 1. Clone this repository using `git clone https://github.com/UCI-Chenli-teaching/cs122b-spring20-project1-api-example.git`
 2. Open IntelliJ -> Import Project -> Choose the project you just cloned (The root path must contain the pom.xml!) -> Choose Import project from external model -> choose Maven -> Click on Finish -> The IntelliJ will load automatically
