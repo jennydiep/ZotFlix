@@ -89,7 +89,8 @@ select top20movies.id, title, group_concat( name ) as "genres"
 from top20movies, genres_in_movies, genres
 where genres_in_movies.movieId = top20movies.id
 and genres.id = genres_in_movies.genreId
-group by title;
+group by top20movies.id;
+
 
 -- lists all stars of top 20 movies
 DROP VIEW IF EXISTS top20stars;
@@ -99,7 +100,8 @@ group_concat( stars.id ) as "starsid"
 from top20movies, stars_in_movies, stars
 where stars_in_movies.movieId = top20movies.id
 and stars.id = stars_in_movies.starId
-group by title;
+group by top20movies.id;
+
 
 -- natural joinning all views together to get top20movie list with
 -- list of genres and stars
@@ -109,6 +111,8 @@ select id, title, year, director, genres, stars, rating, starsid from
 top20movies natural join top20genres
 natural join top20stars
 order by rating DESC;
+
+
 
 -- test
 -- select * from top20;
