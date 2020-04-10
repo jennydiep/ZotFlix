@@ -45,8 +45,9 @@ function handleResult(resultData) {
     let movieInfoElement = jQuery("#movie_info");
 
     // append two html <p> created to the h3 body, which will refresh the page
-    movieInfoElement.append("<p>Movie Title: " + resultData[0][0]["title"] + "</p>" +
-        "<p>Year: " + resultData[0][0]["year"] + "</p>");
+    movieInfoElement.append("<h1>Movie Title: " + resultData[0][0]["title"] + "</h1>" +
+        "<h1>Year: " + resultData[0][0]["year"] + "</h1>");
+
 
     // console.log("handleResult: populating movie table from resultData");
     console.log("handleResult: displaying all stars");
@@ -55,7 +56,7 @@ function handleResult(resultData) {
 
     movieInfoElement.append("</br>");
 
-    movieInfoElement.append( "<p>Stars: </p>");
+    movieInfoElement.append( "<h2>Stars: </h2>");
 
     let starsArray = resultData[0];
     for (let i = 0; i < starsArray.length; i++)
@@ -64,14 +65,14 @@ function handleResult(resultData) {
             "<p>" +
                 '<a href="single-star.html?id=' + starsArray[i]["star_id"] + '">' +
                     starsArray[i]["star_name"] +
-                '</a>' + 
+                '</a>' +
             "</p>";
     }
     movieInfoElement.append(HTMLstars);
     movieInfoElement.append("</br>");
 
     let HTMLgenres = "";
-    movieInfoElement.append("<p>Genres:</p>");
+    movieInfoElement.append("<h2>Genres:</h2>");
 
     let genresArray = resultData[1];
     for (let i = 0; i < genresArray.length; i++)

@@ -1,6 +1,8 @@
 ## CS 122B Project 1: Fabflix
 
+#### Web Application URL: http://ec2-3-21-35-111.us-east-2.compute.amazonaws.com:8080/cs122b-spring20/
 
+#### Demo Video: https://www.youtube.com/watch?v=vpbq1-ypP0E
 
 ### Before running the example
 
