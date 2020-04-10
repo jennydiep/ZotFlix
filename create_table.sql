@@ -131,7 +131,7 @@ order by rating DESC;
 
 
 
-/*
+
 SELECT * FROM movies;
 SELECT * FROM stars;
 SELECT * FROM stars_in_movies;
@@ -141,6 +141,3 @@ SELECT * FROM customers;
 SELECT * FROM sales;
 SELECT * FROM creditcards;
 SELECT * FROM ratings;
-*/
-   
-

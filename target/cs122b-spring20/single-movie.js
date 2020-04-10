@@ -60,7 +60,12 @@ function handleResult(resultData) {
     let starsArray = resultData[0];
     for (let i = 0; i < starsArray.length; i++)
     {
-        HTMLstars += "<p>" + starsArray[i]["star_name"] + "</p>";
+        HTMLstars +=
+            "<p>" +
+                '<a href="single-star.html?id=' + starsArray[i]["star_id"] + '">' +
+                    starsArray[i]["star_name"] +
+                '</a>' + 
+            "</p>";
     }
     movieInfoElement.append(HTMLstars);
     movieInfoElement.append("</br>");
