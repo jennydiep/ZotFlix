@@ -1,9 +1,8 @@
 ## CS 122B Project 1: Fabflix
 
-
-#### Demo Video: https://youtu.be/-4wtQdXwZ68
-##### (Skip to 3:42 to skip populating db)
-##### (Apologies for random stuff during populating the db I forgot how to start Tomcat)
+### Web Application URL: http://ec2-3-18-107-131.us-east-2.compute.amazonaws.com:8080/cs122b-spring20/
+### Demo Video: https://youtu.be/eDRB4Wmmwf0
+##### (Skip to 3:46 to skip populating db)
 
 ##
 
