@@ -51,7 +51,15 @@ function handleResult(resultData) {
     let starsArray = resultData[0];
 
     movieInfoElement.append("<h3>Rating:</h3>");
-    movieInfoElement.append("<h3>" + starsArray[0]["rating"] + "</h3>")
+    if (resultData.length === 3)
+    {
+        movieInfoElement.append("<h3>" + resultData[2]["rating"] + "</h3>");
+    }
+    else
+    {
+        movieInfoElement.append("<h3>N/A</h3>")
+    }
+    // movieInfoElement.append("<h3>" + starsArray[0]["rating"] + "</h3>")
 
 
     // console.log("handleResult: populating movie table from resultData");

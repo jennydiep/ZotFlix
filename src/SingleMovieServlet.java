@@ -43,12 +43,11 @@ public class SingleMovieServlet extends HttpServlet {
             Connection dbcon = dataSource.getConnection();
 
             // Construct a query with parameter represented by "?"
-            String query1 = "select distinct s.name, s.id, m.title, m.year, m.director, rating " +
-                    "from stars as s, stars_in_movies as sim, movies as m, ratings as r " +
+            String query1 = "select distinct s.name, s.id, m.title, m.year, m.director " +
+                    "from stars as s, stars_in_movies as sim, movies as m " +
                     "where m.id = ? " +
                     "and sim.starId = s.id " +
-                    "and sim.movieId = m.id " +
-                    "and r.movieId = m.id";
+                    "and sim.movieId = m.id ";
 
             String query2 = "select distinct g.name, g.id " +
                     "from movies as m, genres_in_movies as gm, genres as g " +
@@ -56,17 +55,21 @@ public class SingleMovieServlet extends HttpServlet {
                     "and gm.movieId = m.id " +
                     "and gm.genreId = g.id";
 
+            // gets rating if empty table = no rating
+            String query3 = "select distinct r.rating from ratings as r, movies as m where m.id = ? and m.id = r.movieId ";
+
 //            String query3 = "select * from movies as m where m.id = ?"
 
             // Declare our statement
             PreparedStatement statement1 = dbcon.prepareStatement(query1);
             PreparedStatement statement2 = dbcon.prepareStatement(query2);
+            PreparedStatement statement3 = dbcon.prepareStatement(query3);
 
             // Set the parameter represented by "?" in the query to the id we get from url,
             // num 1 indicates the first "?" in the query
             statement1.setString(1, id);
             statement2.setString(1, id);
-//            statement3.setString(1, id);
+            statement3.setString(1, id);
 
             // Perform the query
             ResultSet rs1 = statement1.executeQuery();
@@ -84,7 +87,6 @@ public class SingleMovieServlet extends HttpServlet {
                 String title = rs1.getString("title");
                 String year = rs1.getString("year");
                 String director = rs1.getString("director");
-                String rating = rs1.getString("rating");
 
 
                 // Create a JsonObject based on the data we retrieve from rs
@@ -95,7 +97,6 @@ public class SingleMovieServlet extends HttpServlet {
                 jsonObject.addProperty("title", title);
                 jsonObject.addProperty("year", year);
                 jsonObject.addProperty("director", director);
-                jsonObject.addProperty("rating", rating);
 
 
                 jsonArrayStars.add(jsonObject);
@@ -124,6 +125,19 @@ public class SingleMovieServlet extends HttpServlet {
 
             jsonArray.add(jsonArrayGenres);
 
+            ResultSet rs3 = statement3.executeQuery();
+
+            while (rs3.next())
+            {
+                String rating = rs3.getString("rating");
+
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("rating", rating);
+
+                jsonArray.add(jsonObject);
+            }
+
+
             // write JSON string to output
             out.write(jsonArray.toString());
             // set response status to 200 (OK)
@@ -131,8 +145,10 @@ public class SingleMovieServlet extends HttpServlet {
 
             rs1.close();
             rs2.close();
+            rs3.close();
             statement1.close();
             statement2.close();
+            statement3.close();
             dbcon.close();
         } catch (Exception e) {
             // write error message JSON object to output
