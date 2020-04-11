@@ -113,7 +113,6 @@ natural join top20stars
 order by rating DESC;
 
 
-
 -- test
 -- select * from top20;
 
@@ -132,12 +131,12 @@ order by rating DESC;
 
 
 
-SELECT * FROM movies;
-SELECT * FROM stars;
-SELECT * FROM stars_in_movies;
-SELECT * FROM genres;
-SELECT * FROM genres_in_movies;
-SELECT * FROM customers;
-SELECT * FROM sales;
-SELECT * FROM creditcards;
-SELECT * FROM ratings;
+-- SELECT * FROM movies;
+-- SELECT * FROM stars;
+-- SELECT * FROM stars_in_movies;
+-- SELECT * FROM genres;
+-- SELECT * FROM genres_in_movies;
+-- SELECT * FROM customers;
+-- SELECT * FROM sales;
+-- SELECT * FROM creditcards;
+-- SELECT * FROM ratings;

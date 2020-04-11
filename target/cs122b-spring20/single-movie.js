@@ -48,17 +48,19 @@ function handleResult(resultData) {
     movieInfoElement.append("<h1>Movie Title: " + resultData[0][0]["title"] + "</h1>" +
         "<h1>Year: " + resultData[0][0]["year"] + "</h1>");
 
+    let starsArray = resultData[0];
+
+    movieInfoElement.append("<h3>Rating:</h3>");
+    movieInfoElement.append("<h3>" + starsArray[0]["rating"] + "</h3>")
+
 
     // console.log("handleResult: populating movie table from resultData");
     console.log("handleResult: displaying all stars");
 
     let HTMLstars = "";
-
-    movieInfoElement.append("</br>");
-
+    movieInfoElement.append("<br><br>");
     movieInfoElement.append( "<h2>Stars: </h2>");
 
-    let starsArray = resultData[0];
     for (let i = 0; i < starsArray.length; i++)
     {
         HTMLstars +=
