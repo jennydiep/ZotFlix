@@ -9,20 +9,16 @@ import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 
 /**
  * A servlet that takes input from a html <form> and talks to MySQL moviedb,
  * generates output as a html <table>
  */
 
-// Declaring a WebServlet called FormServlet, which maps to url "/form"
+// Declaring a WebServlet called FormServlet, which maps to url "/search"
 @WebServlet(name = "FormServlet", urlPatterns = "/api/search")
 public class Search extends HttpServlet {
-    private static final long serialVersionUID = 2L;
 
     // Create a dataSource which registered in web.xml
     @Resource(name = "jdbc/moviedb")
@@ -36,7 +32,14 @@ public class Search extends HttpServlet {
         response.setContentType("application/json");    // Response mime type
 
         // Retrieve parameter "name" from the http request, which refers to the value of <input name="name"> in index.html
-        String name = request.getParameter("name");
+        String name = request.getParameter("title");
+        String year = request.getParameter("year");
+        String director = request.getParameter("director");
+
+        System.out.println(name);
+        System.out.println(request.getAttribute("year"));
+        System.out.println(director);
+
 
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
@@ -47,7 +50,15 @@ public class Search extends HttpServlet {
             Connection dbcon = dataSource.getConnection();
 
             // Generate a SQL query
-            String query =  String.format("SELECT * from stars where name like '%%%s%%'", name);
+            String query =  "SELECT * from stars where name like '%" + name +"%' ";
+            query += "and birthYear = " + "1972";
+
+//
+//            if (year != "")
+//            {
+//                query += "and birthYear = " + year;
+//            }
+
 
             // Declare our statement
             PreparedStatement statement = dbcon.prepareStatement(query);
@@ -57,7 +68,8 @@ public class Search extends HttpServlet {
             ResultSet rs = statement.executeQuery();
             JsonArray jsonArray = new JsonArray();
             JsonObject jsonParamObject = new JsonObject();
-            jsonParamObject.addProperty("parameter", name);
+            jsonParamObject.addProperty("name", name);
+            jsonParamObject.addProperty("year", year);
 
             jsonArray.add(jsonParamObject); // add search as first param in json array
 

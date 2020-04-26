@@ -19,7 +19,6 @@ function getParameterByName(target) {
     // Get request URL
     let url = window.location.href;
 
-    console.log()
     // Encode target parameter name to url encoding
     target = target.replace(/[\[\]]/g, "\\$&");
 
@@ -46,14 +45,14 @@ function handleResult(resultData) {
     // find the empty h3 body by id "star_info"
     let starSearchInfoElement = jQuery("#search_info");
     // append two html <p> created to the h3 body, which will refresh the page
-    starSearchInfoElement.append("<h1>Star Name: " + resultData[0]["parameter"] + "</h1>");
+    starSearchInfoElement.append("<h1>Search: " + resultData[0]["name"] + "</h1>");
 
     console.log("handleResult: populating star search table from resultData");
 
     // Populate the star table
     // Find the empty table body by id "movie_table_body"
     let starSearchTableBodyElement = jQuery("#search_table_body");
-    let num_records = 10;
+    let num_records = 11;
 
     // Concatenate the html tags with resultData jsonObject to create table rows
     for (let i = 1; i < Math.min(num_records, resultData.length); i++) {
@@ -76,13 +75,17 @@ function handleResult(resultData) {
  */
 
 // Get id from URL
-let starName = getParameterByName('name');
+let starName = getParameterByName('title');
+let birthYear = getParameterByName('year');
+let director = getParameterByName('director');
 console.log("starName: " + starName);
+console.log("starYear: " + birthYear);
+console.log("starYear: " + director);
 
 // Makes the HTTP GET request and registers on success callback function handleResult
 jQuery.ajax({
     dataType: "json",  // Setting return data type
     method: "GET",// Setting request method
-    url: "api/search?name=" + starName, // Setting request url, which is mapped by StarsServlet in Stars.java
+    url: "api/search?name=" + starName + "&?year=" + birthYear, // Setting request url, which is mapped by StarsServlet in Stars.java
     success: (resultData) => handleResult(resultData) // Setting callback function to handle data returned successfully by the SingleStarServlet
 });
