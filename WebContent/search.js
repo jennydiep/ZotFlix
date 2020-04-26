@@ -77,15 +77,13 @@ function handleResult(resultData) {
 // Get id from URL
 let starName = getParameterByName('title');
 let birthYear = getParameterByName('year');
-let director = getParameterByName('director');
 console.log("starName: " + starName);
 console.log("starYear: " + birthYear);
-console.log("starYear: " + director);
 
 // Makes the HTTP GET request and registers on success callback function handleResult
 jQuery.ajax({
     dataType: "json",  // Setting return data type
     method: "GET",// Setting request method
-    url: "api/search?name=" + starName + "&?year=" + birthYear, // Setting request url, which is mapped by StarsServlet in Stars.java
+    url: "api/search?title=" + starName + "&year=" + birthYear, // Setting request url, which is mapped by StarsServlet in Stars.java
     success: (resultData) => handleResult(resultData) // Setting callback function to handle data returned successfully by the SingleStarServlet
 });

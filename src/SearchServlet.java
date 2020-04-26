@@ -10,6 +10,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
+import java.util.Enumeration;
 
 /**
  * A servlet that takes input from a html <form> and talks to MySQL moviedb,
@@ -17,8 +18,8 @@ import java.sql.*;
  */
 
 // Declaring a WebServlet called FormServlet, which maps to url "/search"
-@WebServlet(name = "FormServlet", urlPatterns = "/api/search")
-public class Search extends HttpServlet {
+@WebServlet(name = "SearchServlet", urlPatterns = "/api/search")
+public class SearchServlet extends HttpServlet {
 
     // Create a dataSource which registered in web.xml
     @Resource(name = "jdbc/moviedb")
@@ -29,16 +30,13 @@ public class Search extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
 
-        response.setContentType("application/json");    // Response mime type
-
         // Retrieve parameter "name" from the http request, which refers to the value of <input name="name"> in index.html
         String name = request.getParameter("title");
         String year = request.getParameter("year");
-        String director = request.getParameter("director");
+//        String director = request.getParameter("director");
 
         System.out.println(name);
-        System.out.println(request.getAttribute("year"));
-        System.out.println(director);
+        System.out.println(year);
 
 
         // Output stream to STDOUT
@@ -51,14 +49,10 @@ public class Search extends HttpServlet {
 
             // Generate a SQL query
             String query =  "SELECT * from stars where name like '%" + name +"%' ";
-            query += "and birthYear = " + "1972";
-
-//
-//            if (year != "")
-//            {
-//                query += "and birthYear = " + year;
-//            }
-
+            if (!year.equals(""))
+            {
+                query += "and birthYear " + year;
+            }
 
             // Declare our statement
             PreparedStatement statement = dbcon.prepareStatement(query);
