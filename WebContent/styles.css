@@ -24,8 +24,9 @@ body{
 }
 
 #movie_table tr:hover {background-color: darkgrey;}
-
 #movie_table_body tr:hover {background-color: darkgrey;}
+#search_table tr:hover {background-color: darkgrey;}
+#search_table_body tr:hover {background-color: darkgrey;}
 
 
 title

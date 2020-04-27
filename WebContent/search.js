@@ -56,12 +56,42 @@ function handleResult(resultData) {
 
     // Concatenate the html tags with resultData jsonObject to create table rows
     for (let i = 1; i < Math.min(num_records, resultData.length); i++) {
+        let stars = resultData[i]["stars"];
+        let starsArray = stars.split(',');
+
+        let starsId = resultData[i]["stars_id"];
+        let starsIdArray = starsId.split(',');
+
+        // Concatenate the html tags with resultData jsonObject
         let rowHTML = "";
         rowHTML += "<tr>";
-        // rowHTML += "<th>" + resultData[i]["id"] + "</th>";
-        rowHTML += "<th>" + resultData[i]["title"] + "</th>";
+        rowHTML +=
+            "<th>" +
+            '<a href="single-movie.html?id=' + resultData[i]["id"] + '">'
+            + resultData[i]["title"] +
+            '</a>' +
+            "</th>";
         rowHTML += "<th>" + resultData[i]["year"] + "</th>";
         rowHTML += "<th>" + resultData[i]["director"] + "</th>";
+        rowHTML += "<th>" + resultData[i]["genres"] + "</th>";
+
+        rowHTML += "<th>";
+        for (let j = 0; j < Math.min(2, starsArray.length); j++)
+        {
+            rowHTML +=
+                '<a href="single-star.html?id=' + starsIdArray[j] + '">'
+                + starsArray[j] +  ", "  + // display star_name for the link text
+                '</a>'
+        }
+        rowHTML +=
+            '<a href="single-star.html?id=' + starsIdArray[2] + '">'
+            + starsArray[2]  + // display star_name for the link text
+            '</a>'
+        rowHTML += "</th>";
+
+
+        rowHTML += "<th>" + resultData[i]["rating"] + "</th>";
+        // rowHTML += "<th>" + resultData[i]["movie_director"] + "</th>";
         rowHTML += "</tr>";
 
         // Append the row created to the table body, which will refresh the page

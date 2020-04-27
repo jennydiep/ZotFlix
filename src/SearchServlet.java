@@ -47,19 +47,46 @@ public class SearchServlet extends HttpServlet {
             Connection dbcon = dataSource.getConnection();
 
             // Generate a SQL query
-            String query =  "SELECT * from movies where title like '%" + title +"%' ";
-            query += "and director like '%" + director + "%'";
+//            String query =  "SELECT * from movies where title like '%" + title +"%' ";
+//            query += "and director like '%" + director + "%'";
+//            if (!year.equals(""))
+//            {
+//                query += "and year = " + year;
+//            }
+//            String query = "drop view if exists movielist; ";
+            String query = "";
+//            create view movielist as
+            query += " " +
+                    "select title, year, director, starID, m.id, rating, numVotes, " +
+                    "group_concat(distinct g.name) as \"genres\", " +
+                    "group_concat(distinct genreId) as \"genreIDs\", " +
+                    "group_concat(distinct s.name) as \"stars\", " +
+                    "group_concat(distinct starId) as \"starIDs\" " +
+                    "from movies as m, stars_in_movies as sm, stars as s, " +
+                    "genres_in_movies as gm, genres as g, ratings as r " +
+                    "where m.id = sm.movieId " +
+                    "and sm.starId = s.id " +
+                    "and gm.movieId = m.id " +
+                    "and gm.genreId = g.id " +
+                    "and r.movieId = m.id ";
+
+            query +=  "and title like '%" + title +"%' ";
+            query += "and director like '%" + director + "%' ";
             if (!year.equals(""))
             {
-                query += "and year = " + year;
+                query += "and year = " + year + " ";
             }
+            query += "group by m.id;";
+
+
 
             // Declare our statement
             PreparedStatement statement = dbcon.prepareStatement(query);
-
-
             // Perform the query
             ResultSet rs = statement.executeQuery();
+
+
+
             JsonArray jsonArray = new JsonArray();
             JsonObject jsonParamObject = new JsonObject();
             jsonParamObject.addProperty("title", title);
@@ -69,16 +96,26 @@ public class SearchServlet extends HttpServlet {
             jsonArray.add(jsonParamObject); // add search as first param in json array
 
             while (rs.next()) {
-                String m_ID = rs.getString("ID");
-                String m_Name = rs.getString("title");
-                String m_Year = rs.getString("year");
-                String m_Director = rs.getString("director");
+                String movie_id = rs.getString("ID");
+                String movie_name = rs.getString("title");
+                String movie_year = rs.getString("year");
+                String movie_director = rs.getString("director");
+                String movie_genres = rs.getString("genres");
+                String movie_genres_id = rs.getString("genreids");
+                String movie_stars = rs.getString("stars");
+                String movie_stars_id = rs.getString("starids");
+                String movie_rating = rs.getString("rating");
 
                 JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("id", m_ID);
-                jsonObject.addProperty("title", m_Name);
-                jsonObject.addProperty("year", m_Year);
-                jsonObject.addProperty("director", m_Director);
+                jsonObject.addProperty("id", movie_id);
+                jsonObject.addProperty("title", movie_name);
+                jsonObject.addProperty("year", movie_year);
+                jsonObject.addProperty("director", movie_director);
+                jsonObject.addProperty("genres", movie_genres);
+                jsonObject.addProperty("genres_id", movie_genres_id);
+                jsonObject.addProperty("stars", movie_stars);
+                jsonObject.addProperty("stars_id", movie_stars_id);
+                jsonObject.addProperty("rating", movie_rating);
 
                 jsonArray.add(jsonObject);
             }
