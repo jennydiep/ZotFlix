@@ -31,11 +31,11 @@ public class SearchServlet extends HttpServlet {
             throws IOException {
 
         // Retrieve parameter "name" from the http request, which refers to the value of <input name="name"> in index.html
-        String name = request.getParameter("title");
+        String title = request.getParameter("title");
         String year = request.getParameter("year");
 //        String director = request.getParameter("director");
 
-        System.out.println(name);
+        System.out.println(title);
         System.out.println(year);
 
 
@@ -48,10 +48,10 @@ public class SearchServlet extends HttpServlet {
             Connection dbcon = dataSource.getConnection();
 
             // Generate a SQL query
-            String query =  "SELECT * from stars where name like '%" + name +"%' ";
+            String query =  "SELECT * from movies where title like '%" + title +"%' ";
             if (!year.equals(""))
             {
-                query += "and birthYear " + year;
+                query += "and year = " + year;
             }
 
             // Declare our statement
@@ -62,18 +62,18 @@ public class SearchServlet extends HttpServlet {
             ResultSet rs = statement.executeQuery();
             JsonArray jsonArray = new JsonArray();
             JsonObject jsonParamObject = new JsonObject();
-            jsonParamObject.addProperty("name", name);
+            jsonParamObject.addProperty("title", title);
             jsonParamObject.addProperty("year", year);
 
             jsonArray.add(jsonParamObject); // add search as first param in json array
 
             while (rs.next()) {
                 String m_ID = rs.getString("ID");
-                String m_Name = rs.getString("name");
+                String m_Name = rs.getString("title");
 
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("star_id", m_ID);
-                jsonObject.addProperty("star_name", m_Name);
+                jsonObject.addProperty("title", m_Name);
 
                 jsonArray.add(jsonObject);
             }

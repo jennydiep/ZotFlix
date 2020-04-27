@@ -45,7 +45,7 @@ function handleResult(resultData) {
     // find the empty h3 body by id "star_info"
     let starSearchInfoElement = jQuery("#search_info");
     // append two html <p> created to the h3 body, which will refresh the page
-    starSearchInfoElement.append("<h1>Search: " + resultData[0]["name"] + "</h1>");
+    starSearchInfoElement.append("<h1>Search: " + resultData[0]["title"] + "</h1>");
 
     console.log("handleResult: populating star search table from resultData");
 
@@ -59,7 +59,7 @@ function handleResult(resultData) {
         let rowHTML = "";
         rowHTML += "<tr>";
         rowHTML += "<th>" + resultData[i]["star_id"] + "</th>";
-        rowHTML += "<th>" + resultData[i]["star_name"] + "</th>";
+        rowHTML += "<th>" + resultData[i]["title"] + "</th>";
         rowHTML += "</tr>";
 
         // Append the row created to the table body, which will refresh the page
