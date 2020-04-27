@@ -15,16 +15,32 @@
 </head>
 
 <body>
+<!-- SearchServlet Form -->
+<form id=search_form ACTION="search.html" METHOD="GET">
+    Title: <input name="title" type="TEXT"><br>
+    Year: <input name="year" type="TEXT"><br>
+    Director <input name="director" type="TEXT"><br>
+
+    <input type="submit" VALUE="Search">
+
+</form>
     <h3 id=search_info></h3>
 <table id=search_table class="table table-striped">
     <thead>
     <tr>
-        <th>ID</th>
         <th>Title</th>
+        <th>Year</th>
+        <th>Director</th>
     </tr>
     </thead>
     <tbody id=search_table_body></tbody>
 </table>
+<button onclick="location.href=/cs122b-spring20/" id="buttonPrev" type="button">
+    Prev
+</button><br>
+<button onclick="location.href=/cs122b-spring20/" id="buttonNext" type="button">
+    Next
+</button><br>
 </body>
 
 <!-- Load jQuery and Bootstrap JS -->

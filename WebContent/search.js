@@ -58,8 +58,10 @@ function handleResult(resultData) {
     for (let i = 1; i < Math.min(num_records, resultData.length); i++) {
         let rowHTML = "";
         rowHTML += "<tr>";
-        rowHTML += "<th>" + resultData[i]["star_id"] + "</th>";
+        // rowHTML += "<th>" + resultData[i]["id"] + "</th>";
         rowHTML += "<th>" + resultData[i]["title"] + "</th>";
+        rowHTML += "<th>" + resultData[i]["year"] + "</th>";
+        rowHTML += "<th>" + resultData[i]["director"] + "</th>";
         rowHTML += "</tr>";
 
         // Append the row created to the table body, which will refresh the page
@@ -75,15 +77,17 @@ function handleResult(resultData) {
  */
 
 // Get id from URL
-let starName = getParameterByName('title');
-let birthYear = getParameterByName('year');
-console.log("starName: " + starName);
-console.log("starYear: " + birthYear);
+let title = getParameterByName('title');
+let year = getParameterByName('year');
+let director = getParameterByName('director');
+console.log("title: " + title);
+console.log("year: " + year);
+console.log("director: " + director);
 
 // Makes the HTTP GET request and registers on success callback function handleResult
 jQuery.ajax({
     dataType: "json",  // Setting return data type
     method: "GET",// Setting request method
-    url: "api/search?title=" + starName + "&year=" + birthYear, // Setting request url, which is mapped by StarsServlet in Stars.java
+    url: "api/search?title=" + title + "&year=" +  year + "&director=" + director, // Setting request url, which is mapped by StarsServlet in Stars.java
     success: (resultData) => handleResult(resultData) // Setting callback function to handle data returned successfully by the SingleStarServlet
 });
