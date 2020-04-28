@@ -98,7 +98,7 @@ public class SearchServlet extends HttpServlet {
             String queryViews2 =
                     "create view actors as  " +
                     "select distinct s.id as starId, name, m.id, title " +
-                    "from advancedsearch as m, " +
+                    "from advancedSearch as m, " +
                     "stars as s, stars_in_movies as sm " +
                     "where m.id = sm.movieId " +
                     "and sm.starId = s.id";
@@ -113,7 +113,7 @@ public class SearchServlet extends HttpServlet {
                     "create view starsInMoviesSearch as " +
                     "select a.id, title, group_concat(name order by popularity DESC, name) as \"stars\",  " +
                     "group_concat(starId order by popularity DESC, name) as \"starIDs\"  " +
-                    "from popularity as p join advancedsearch as a on p.id = a.id  " +
+                    "from popularity as p join advancedSearch as a on p.id = a.id  " +
                     "group by id ";
 
             String queryViews5 =
