@@ -9,13 +9,17 @@
  *      3. Populate the data to correct html elements.
  */
 
-let page = 0; // page starts at first
-let numRecords = 10; // default records is 25
+// let page = 0; // page starts at first
+// let numRecords = 10; // default records is 25
 
 function incrementPage()
 {
     // page++;
     // console.log("page number: " + page);
+
+    // if offset is already at first/last page stay on same page
+    // if (offset < 0)
+
 
     offset = (parseInt(offset) + parseInt(records)).toString();
     console.log("incrementPage() offset: " + offset);
@@ -70,6 +74,25 @@ function getParameterByName(target) {
  */
 
 function handleResult(resultData) {
+
+    if (offset <= 0) // to hide prev button on first page
+    {
+        offset = 0;
+        document.getElementById("buttonPrev").style.visibility = "hidden";
+    }
+    else
+    {
+        document.getElementById("buttonPrev").style.visibility = "visible";
+    }
+
+    if (resultData.length < records) // to hide next button on last page
+    {
+        document.getElementById("buttonNext").style.visibility = "hidden";
+    }
+    else
+    {
+        document.getElementById("buttonNext").style.visibility = "visible";
+    }
 
     console.log("handleResult: populating star search info from resultData");
 
