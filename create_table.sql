@@ -119,6 +119,8 @@ where s.id = sm.starId
 group by name
 order by count(*) DESC;
 
+SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
+
 
 -- test
 -- select * from top20;
