@@ -47,41 +47,108 @@ public class SearchServlet extends HttpServlet {
             Connection dbcon = dataSource.getConnection();
 
             // Generate a SQL query
-//            String query =  "SELECT * from movies where title like '%" + title +"%' ";
-//            query += "and director like '%" + director + "%'";
-//            if (!year.equals(""))
-//            {
-//                query += "and year = " + year;
-//            }
-//            String query = "drop view if exists movielist; ";
-            String query = "";
-//            create view movielist as
-            query += " " +
-                    "select title, year, director, starID, m.id, rating, numVotes, " +
-                    "group_concat(distinct g.name) as \"genres\", " +
-                    "group_concat(distinct genreId) as \"genreIDs\", " +
-                    "group_concat(distinct s.name) as \"stars\", " +
-                    "group_concat(distinct starId) as \"starIDs\" " +
-                    "from movies as m, stars_in_movies as sm, stars as s, " +
-                    "genres_in_movies as gm, genres as g, ratings as r " +
-                    "where m.id = sm.movieId " +
-                    "and sm.starId = s.id " +
-                    "and gm.movieId = m.id " +
-                    "and gm.genreId = g.id " +
-                    "and r.movieId = m.id ";
+            String queryViews1 = "create view advancedSearch as select title, " +
+                    "m.id from stars_in_movies as sm, " +
+                    "movies as m, stars as s " +
+                    "where title like '%" + title +"%' ";
 
-            query +=  "and title like '%" + title +"%' ";
-            query += "and director like '%" + director + "%' ";
             if (!year.equals(""))
             {
-                query += "and year = " + year + " ";
+                queryViews1 += "and year = " + year + " ";
             }
-            query += "group by m.id;";
+
+            queryViews1 +=
+                    "and director like '%" + director + "%' " +
+                    "and s.name like '%%' " +
+                    "and s.id = sm.starId " +
+                    "and sm.movieId = m.id " +
+                    "group by m.id";
+
+            String queryViews2 =
+                    "create view actors as  " +
+                    "select distinct s.id as starId, name, m.id, title " +
+                    "from advancedsearch as m, " +
+                    "stars as s, stars_in_movies as sm " +
+                    "where m.id = sm.movieId " +
+                    "and sm.starId = s.id";
+
+            String queryViews3 =
+                    "create view popularity as  " +
+                    "select starId, a.name, a.id, popularity from actors as a, topstars as ts " +
+                    "where a.starId = ts.id " +
+                    "order by popularity desc, a.name ";
+
+            String queryViews4 =
+                    "create view starsInMoviesSearch as " +
+                    "select a.id, title, group_concat(name order by popularity DESC, name) as \"stars\",  " +
+                    "group_concat(starId order by popularity DESC, name) as \"starIDs\"  " +
+                    "from popularity as p join advancedsearch as a on p.id = a.id  " +
+                    "group by id ";
+
+            String queryViews5 =
+                    "create view advGenreSearch as " +
+                    "select ss.id, title, stars, starIDs, group_concat(g.name order by g.name) as \"genres\", group_concat(g.id order by g.name) as \"genreIDs\"  " +
+                    "from starsInMoviesSearch as ss, genres as g, genres_in_movies as gm " +
+                    "where g.id = gm.genreId " +
+                    "and ss.id = gm.movieId " +
+                    "group by ss.id ";
+
+            String query =
+                    "select m.id, m.title, director, stars, year, starIDs, genres, genreIDs, rating, numVotes " +
+                    "from movies as m, advGenreSearch as ag left join ratings on ratings.movieId = ag.id " +
+                    "where m.id = ag.id";
+
+//            String query = "";
+//            query += " " +
+//                    "select title, year, director, starID, m.id, rating, numVotes, " +
+//                    "group_concat(distinct g.name) as \"genres\", " +
+//                    "group_concat(distinct genreId) as \"genreIDs\", " +
+//                    "group_concat(s.name) as \"stars\", " +
+//                    "group_concat(starId) as \"starIDs\" " +
+//                    "from movies as m, stars_in_movies as sm, stars as s, " +
+//                    "genres_in_movies as gm, genres as g, ratings as r " +
+//                    "where m.id = sm.movieId " +
+//                    "and sm.starId = s.id " +
+//                    "and gm.movieId = m.id " +
+//                    "and gm.genreId = g.id " +
+//                    "and r.movieId = m.id ";
+//
+//            query +=  "and title like '%" + title +"%' ";
+//            query += "and director like '%" + director + "%' ";
+//            if (!year.equals(""))
+//            {
+//                query += "and year = " + year + " ";
+//            }
+//            query += "group by m.id;";
 
 
 
             // Declare our statement
+            PreparedStatement statementDrops1 = dbcon.prepareStatement("drop view if exists advancedSearch");
+            PreparedStatement statementDrops2 = dbcon.prepareStatement("drop view if exists actors");
+            PreparedStatement statementDrops3 = dbcon.prepareStatement("drop view if exists popularity");
+            PreparedStatement statementDrops4 = dbcon.prepareStatement("drop view if exists starsInMoviesSearch");
+            PreparedStatement statementDrops5 = dbcon.prepareStatement("drop view if exists advGenreSearch");
+
             PreparedStatement statement = dbcon.prepareStatement(query);
+            PreparedStatement statementViews1 = dbcon.prepareStatement(queryViews1);
+            PreparedStatement statementViews2 = dbcon.prepareStatement(queryViews2);
+            PreparedStatement statementViews3 = dbcon.prepareStatement(queryViews3);
+            PreparedStatement statementViews4 = dbcon.prepareStatement(queryViews4);
+            PreparedStatement statementViews5 = dbcon.prepareStatement(queryViews5);
+
+            statementDrops1.execute();
+            statementDrops2.execute();
+            statementDrops3.execute();
+            statementDrops4.execute();
+            statementDrops5.execute();
+
+            statementViews1.execute();
+            statementViews2.execute();
+            statementViews3.execute();
+            statementViews4.execute();
+            statementViews5.execute();
+
             // Perform the query
             ResultSet rs = statement.executeQuery();
 

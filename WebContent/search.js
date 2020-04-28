@@ -56,11 +56,13 @@ function handleResult(resultData) {
 
     // Concatenate the html tags with resultData jsonObject to create table rows
     for (let i = 1; i < Math.min(num_records, resultData.length); i++) {
-        let stars = resultData[i]["stars"];
-        let starsArray = stars.split(',');
+        let stars = resultData[i]["stars"].split(',');
+        let starsId = resultData[i]["stars_id"].split(',');
 
-        let starsId = resultData[i]["stars_id"];
-        let starsIdArray = starsId.split(',');
+        let genres = resultData[i]["genres"].split(",");
+        let genresId = resultData[i]["genres_id"].split(",");
+
+
 
         // Concatenate the html tags with resultData jsonObject
         let rowHTML = "";
@@ -75,23 +77,10 @@ function handleResult(resultData) {
         rowHTML += "<th>" + resultData[i]["director"] + "</th>";
         rowHTML += "<th>" + resultData[i]["genres"] + "</th>";
 
-        rowHTML += "<th>";
-        for (let j = 0; j < Math.min(2, starsArray.length); j++)
-        {
-            rowHTML +=
-                '<a href="single-star.html?id=' + starsIdArray[j] + '">'
-                + starsArray[j] +  ", "  + // display star_name for the link text
-                '</a>'
-        }
-        rowHTML +=
-            '<a href="single-star.html?id=' + starsIdArray[2] + '">'
-            + starsArray[2]  + // display star_name for the link text
-            '</a>'
-        rowHTML += "</th>";
 
-
+        let starsHTML = formatLinks(starsId, stars, "single-star.html?id=");
+        rowHTML += starsHTML;
         rowHTML += "<th>" + resultData[i]["rating"] + "</th>";
-        // rowHTML += "<th>" + resultData[i]["movie_director"] + "</th>";
         rowHTML += "</tr>";
 
         // Append the row created to the table body, which will refresh the page
@@ -100,6 +89,23 @@ function handleResult(resultData) {
 
 
 
+}
+
+function formatLinks(ids, names, link)
+// takes the arrays and formats them into html with links
+{
+    let result = "";
+    result += "<th>";
+    for (let i = 0; i < Math.min(2, ids.length); i++)
+    {
+        result +=
+            `<a href="${link}${ids[i]}">${names[i]}, </a>`;
+    }
+    result +=
+        `<a href="${link}${ids[2]}">${names[2]// display star_name for the link text without comma
+        }</a>`;
+    result += "</th>";
+    return result;
 }
 
 /**

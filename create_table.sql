@@ -112,6 +112,13 @@ top20movies natural join top20genres
 natural join top20stars
 order by rating DESC;
 
+drop view if exists topstars;
+create view topstars as 
+select name, s.id, count(*) as "popularity" from stars as s, stars_in_movies as sm 
+where s.id = sm.starId
+group by name
+order by count(*) DESC;
+
 
 -- test
 -- select * from top20;
