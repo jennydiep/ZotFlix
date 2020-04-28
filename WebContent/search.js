@@ -52,7 +52,7 @@ function handleResult(resultData) {
     // Populate the star table
     // Find the empty table body by id "movie_table_body"
     let starSearchTableBodyElement = jQuery("#search_table_body");
-    let num_records = 11;
+    let num_records = resultData.length;
 
     // Concatenate the html tags with resultData jsonObject to create table rows
     for (let i = 1; i < Math.min(num_records, resultData.length); i++) {
@@ -75,11 +75,14 @@ function handleResult(resultData) {
             "</th>";
         rowHTML += "<th>" + resultData[i]["year"] + "</th>";
         rowHTML += "<th>" + resultData[i]["director"] + "</th>";
-        rowHTML += "<th>" + resultData[i]["genres"] + "</th>";
+        let genresHTML = formatLinks(genresId, genres, "search.html?title=&year=&director=&star=&genre=");
+        rowHTML += genresHTML;
 
 
         let starsHTML = formatLinks(starsId, stars, "single-star.html?id=");
         rowHTML += starsHTML;
+
+
         rowHTML += "<th>" + resultData[i]["rating"] + "</th>";
         rowHTML += "</tr>";
 
@@ -122,15 +125,21 @@ let title = getParameterByName('title');
 let year = getParameterByName('year');
 let director = getParameterByName('director');
 let star = getParameterByName('star');
+let genre = getParameterByName("genre");
+if (genre == null)
+{
+    genre = "";
+}
 console.log("title: " + title);
 console.log("year: " + year);
 console.log("director: " + director);
 console.log("star: " + star);
+console.log("genre: ", genre);
 
 // Makes the HTTP GET request and registers on success callback function handleResult
 jQuery.ajax({
     dataType: "json",  // Setting return data type
     method: "GET",// Setting request method
-    url: "api/search?title=" + title + "&year=" +  year + "&director=" + director +"&star=" + star, // Setting request url, which is mapped by StarsServlet in Stars.java
+    url: "api/search?title=" + title + "&year=" +  year + "&director=" + director +"&star=" + star + "&genre=" + genre, // Setting request url, which is mapped by StarsServlet in Stars.java
     success: (resultData) => handleResult(resultData) // Setting callback function to handle data returned successfully by the SingleStarServlet
 });

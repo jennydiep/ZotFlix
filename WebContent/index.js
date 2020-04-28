@@ -19,14 +19,25 @@ function handleStarResult(resultData) {
     let alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
     let htmlAlpha = "";
 
-    htmlAlpha += "<a href='search.html?title=*&year=&director=&star='> * </a>"
+    htmlAlpha += "<a href='search.html?title=*&year=&director=&star=&genre='> * </a>"
 
     for (let i = 0; i < alphabet.length; i++)
     {
-        htmlAlpha += "<a href='search.html?title=" + alphabet[i] +"&year=&director=&star=' > " + alphabet[i] + " </a>";
+        htmlAlpha += "<a href='search.html?title=" + alphabet[i] +"&year=&director=&star=&genre=' > " + alphabet[i] + " </a>";
     }
 
     starSearchInfoElement.append(htmlAlpha);
+
+    let genreInfoElement = jQuery("#genres");
+
+    let htmlGenres = "";
+    for (let i = 0; i < resultData.length; i++)
+    {
+        htmlGenres += "<a href='search.html?title=&year=&director=&star=&genre=" + resultData[i]["genre_id"] + "' > " +
+            resultData[i]["genre_name"] + " </a>";
+    }
+
+    genreInfoElement.append(htmlGenres);
 }
 
 
@@ -38,6 +49,6 @@ function handleStarResult(resultData) {
 jQuery.ajax({
     dataType: "json", // Setting return data type
     method: "GET", // Setting request method
-    url: "api/movies", // Setting request url, which is mapped by StarsServlet in Stars.java
+    url: "api/genres", // Setting request url, which is mapped by StarsServlet in Stars.java
     success: (resultData) => handleStarResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
 });

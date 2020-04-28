@@ -35,11 +35,14 @@ public class SearchServlet extends HttpServlet {
         String year = request.getParameter("year");
         String director = request.getParameter("director");
         String star = request.getParameter("star");
+        String genre = request.getParameter("genre");
+
 
         System.out.println("title: " + title);
         System.out.println("year: " + year);
         System.out.println("director: " + director);
         System.out.println("star: " + star);
+        System.out.println("genre: " + genre);
 
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
@@ -49,18 +52,23 @@ public class SearchServlet extends HttpServlet {
             Connection dbcon = dataSource.getConnection();
 
             // Generate a SQL query
+            String queryViews1 = "create view advancedSearch as " +
+                    "select title, m.id from stars_in_movies as sm, " +
+                    "movies as m, stars as s, genres as g, genres_in_movies as gm ";
 
-            String queryViews1 = "create view advancedSearch as select title, " +
-                    "m.id from stars_in_movies as sm, " +
-                    "movies as m, stars as s ";
+            queryViews1 +=
+                    "where s.id = sm.starId " +
+                    "and sm.movieId = m.id " +
+                    "and gm.movieId = m.id " +
+                    "and g.id = gm.genreId ";
 
-            if (title.equals("*"))
+            if (title.equals("*")) // to activate browse by non alphanumeric
             {
-                queryViews1 += "where title NOT REGEXP '^[A-Za-z0-9\\.,@&\\(\\) \\-]*$'";
+                queryViews1 += "and title NOT REGEXP '^[A-Za-z0-9\\.,@&\\(\\) \\-]*$'";
             }
-            else
+            else if (!title.equals("")) // don't include title in query if it is not used
             {
-                queryViews1 += "where title like '" + title + "%' ";
+                queryViews1 += "and title like '" + title + "%' ";
             }
 
             if (!year.equals(""))
@@ -68,12 +76,24 @@ public class SearchServlet extends HttpServlet {
                 queryViews1 += "and year = " + year + " ";
             }
 
-            queryViews1 +=
-                    "and director like '%" + director + "%' " +
-                    "and s.name like '%" + star + "%' " +
-                    "and s.id = sm.starId " +
-                    "and sm.movieId = m.id " +
-                    "group by m.id";
+            if (!director.equals(""))
+            {
+                queryViews1 += "and director like '%" + director + "%' ";
+            }
+
+            if (!star.equals(""))
+            {
+                queryViews1 += "and s.name like '%" + star + "%' ";
+            }
+
+            if (!genre.equals(""))
+            {
+                queryViews1 += "and g.id = " + genre + " ";
+            }
+
+            queryViews1 += "group by m.id";
+
+            System.out.println(queryViews1);
 
             String queryViews2 =
                     "create view actors as  " +
@@ -108,6 +128,7 @@ public class SearchServlet extends HttpServlet {
                     "select m.id, m.title, director, stars, year, starIDs, genres, genreIDs, rating, numVotes " +
                     "from movies as m, advGenreSearch as ag left join ratings on ratings.movieId = ag.id " +
                     "where m.id = ag.id";
+            // add order by title ASC, rating DESC and LIMIT 10,10
 
             // Declare our statement
             PreparedStatement statementDrops1 = dbcon.prepareStatement("drop view if exists advancedSearch");
