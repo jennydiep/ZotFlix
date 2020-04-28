@@ -101,10 +101,15 @@ function formatLinks(ids, names, link)
         result +=
             `<a href="${link}${ids[i]}">${names[i]}, </a>`;
     }
-    result +=
-        `<a href="${link}${ids[2]}">${names[2]// display star_name for the link text without comma
-        }</a>`;
-    result += "</th>";
+
+    if (ids.length > 2)
+    {
+        result +=
+            `<a href="${link}${ids[2]}">${names[2]// display star_name for the link text without comma
+            }</a>`;
+        result += "</th>";
+    }
+
     return result;
 }
 

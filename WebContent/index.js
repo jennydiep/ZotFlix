@@ -16,8 +16,10 @@
 function handleStarResult(resultData) {
     let starSearchInfoElement = jQuery("#titles");
 
-    let alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+    let alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
     let htmlAlpha = "";
+
+    htmlAlpha += "<a href='search.html?title=*&year=&director=&star='> * </a>"
 
     for (let i = 0; i < alphabet.length; i++)
     {

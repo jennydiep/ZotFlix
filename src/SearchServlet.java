@@ -49,10 +49,19 @@ public class SearchServlet extends HttpServlet {
             Connection dbcon = dataSource.getConnection();
 
             // Generate a SQL query
+
             String queryViews1 = "create view advancedSearch as select title, " +
                     "m.id from stars_in_movies as sm, " +
-                    "movies as m, stars as s " +
-                    "where title like '" + title +"%' ";
+                    "movies as m, stars as s ";
+
+            if (title.equals("*"))
+            {
+                queryViews1 += "where title NOT REGEXP '^[A-Za-z0-9\\.,@&\\(\\) \\-]*$'";
+            }
+            else
+            {
+                queryViews1 += "where title like '" + title + "%' ";
+            }
 
             if (!year.equals(""))
             {
