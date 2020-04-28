@@ -29,19 +29,31 @@
     Home
 </button><br>
 <br>
+<div>
+    <button onclick="location.href=setSortOption(`sortTitle`, `ASC`)" type="button">
+        Title ASC
+    </button><br>
+    <button onclick="location.href=setSortOption(`sortTitle`, `DESC`)" type="button">
+        Title DESC
+    </button><br>
+    <button onclick="location.href=setSortOption(`sortRating`, `ASC`)" type="button">
+        Rating ASC
+    </button><br>
+    <button onclick="location.href=setSortOption(`sortRating`, `DESC`)" type="button">
+        Rating DESC
+    </button><br>
+</div>
 
-<button onclick="location.href=/cs122b-spring20/" type="button">
-    Title ASC
-</button><br>
-<button onclick="location.href=/cs122b-spring20/" type="button">
-    Title DESC
-</button><br>
-<button onclick="location.href=/cs122b-spring20/" type="button">
-    Rating ASC
-</button><br>
-<button onclick="location.href=/cs122b-spring20/" type="button">
-    Rating DESC
-</button><br>
+<!-- change number of records -->
+<div class="dropdown">
+<!--    <button onclick="changeNumRecords()" id="dropButton" class="dropbtn">Dropdown</button>-->
+    <div id="myDropdown" class="dropdown-content">
+        <button onclick="location.href=changeNumRecords(10)" type="button">10</button>
+        <button onclick="location.href=changeNumRecords(25)" type="button">25</button>
+        <button onclick="location.href=changeNumRecords(50)" type="button">50</button>
+        <button onclick="location.href=changeNumRecords(100)" type="button">100</button>
+    </div>
+</div>
 
     <h3 id=search_info></h3>
 <table id=search_table class="table table-striped">

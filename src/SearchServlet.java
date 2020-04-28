@@ -38,12 +38,24 @@ public class SearchServlet extends HttpServlet {
         String genre = request.getParameter("genre");
         String offset = request.getParameter("offset");
         String records = request.getParameter("records");
+        String sortTitle = request.getParameter("sortTitle");
+        String sortRating = request.getParameter("sortRating");
 
-//        if (offset.equals(""))
+        //set default sorting
+//        if (sortTitle == null)
+//        {
+//            sortTitle = "ASC";
+//        }
+//        if (sortRating == null)
+//        {
+//            sortRating = "ASC";
+//        }
+//
+//        if (offset == null)
 //        {
 //            offset = "0"; // default value (starts on the first page)
 //        }
-//        if (records.equals(""))
+//        if (records == null)
 //
 //        {
 //            records = "10"; // default value 10 records
@@ -56,6 +68,8 @@ public class SearchServlet extends HttpServlet {
         System.out.println("genre: " + genre);
         System.out.println("records: " + records);
         System.out.println("offset: " + offset);
+        System.out.println("sortTitle: " + sortTitle);
+        System.out.println("sortRating: " + sortRating);
 
 
         // Output stream to STDOUT
@@ -142,6 +156,7 @@ public class SearchServlet extends HttpServlet {
                     "select m.id, m.title, director, stars, year, starIDs, genres, genreIDs, rating, numVotes " +
                     "from movies as m, advGenreSearch as ag left join ratings on ratings.movieId = ag.id " +
                     "where m.id = ag.id " +
+                    "order by title " + sortTitle + ", rating " + sortRating + " " +
                     "limit " + records + " " +
                     "offset " + offset;
             // add order by title ASC, rating DESC and LIMIT 10,10

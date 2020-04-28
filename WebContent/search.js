@@ -23,21 +23,26 @@ function incrementPage()
     offset = (parseInt(offset) + parseInt(records)).toString();
 
     let temp = window.location.search;
-    let tempArray = temp.split("&");
-    let result = "";
-
-    for (let i = 0; i < tempArray.length; i++)
-    {
-        if (tempArray[i].split("=")[0] == "offset")
-        {
-            tempArray[i] = "offset=" + offset; // replacing previous offset with new offset
-        }
-    }
-    result = tempArray.join("&");
+    let result = temp.replace(/offset=([0-9]+)/i, "offset=" + offset);
     if (!result.includes("offset")) // doesn't have offset then just add it
     {
         result += "&offset=" + offset;
     }
+    let url = window.location.pathname + result;
+    url = decodeURIComponent(url);
+    return url;
+}
+
+function changeNumRecords(numRecords)
+{
+    records = numRecords;
+    let temp = window.location.search;
+    let result = temp.replace(/records=([0-9]+)/i, "records=" + numRecords);
+    if (!result.includes("records")) // doesn't have offset then just add it
+    {
+        result += "&records=" + numRecords;
+    }
+
     let url = window.location.pathname + result;
     url = decodeURIComponent(url);
     return url;
@@ -72,6 +77,7 @@ function getParameterByName(target) {
 
 function handleResult(resultData) {
 
+    //show/hide buttons
     if (offset <= 0) // to hide prev button on first page
     {
         offset = 0;
@@ -180,6 +186,31 @@ function formatLinks(ids, names, link)
     return result;
 }
 
+function setSortOption(sortby, option)
+{
+    let temp = window.location.search;
+    let re = new RegExp( sortby + "=(ASC|DESC)", 'g');
+    let result = temp.replace(re, sortby + "=" + option);
+
+    if (sortby == "sortTitle")
+    {
+        sortTitle = option;
+    }
+    else
+    {
+        sortRating = option;
+    }
+
+    if (!result.includes(sortby)) // doesn't have offset then just add it
+    {
+        result += "&"+ sortby +"=" + option;
+    }
+
+    let url = window.location.pathname + result;
+    url = decodeURIComponent(url);
+    return url;
+}
+
 /**
  * Once this .js is loaded, following scripts will be executed by the browser\
  */
@@ -192,6 +223,17 @@ let star = getParameterByName('star');
 let genre = getParameterByName("genre");
 let records = getParameterByName("records");
 let offset = getParameterByName("offset");
+let sortTitle = getParameterByName("sortTitle");
+let sortRating = getParameterByName("sortRating");
+
+if (sortTitle == null)
+{
+    sortTitle = "ASC"
+}
+if (sortRating == null)
+{
+    sortRating = "ASC"
+}
 
 if (offset == null)
 {
@@ -206,22 +248,22 @@ if (genre == null)
     genre = "";
 }
 
-
 console.log("title: " + title);
 console.log("year: " + year);
 console.log("director: " + director);
 console.log("star: " + star);
 console.log("genre: " + genre);
-// console.log("page: " + page);
-// console.log("numRecords: " + numRecords);
 console.log("records: " + records);
 console.log("offset: " + offset);
+
+
 
 // Makes the HTTP GET request and registers on success callback function handleResult
 jQuery.ajax({
     dataType: "json",  // Setting return data type
     method: "GET",// Setting request method
     url: "api/search?title=" + title + "&year=" +  year + "&director=" + director +"" +
-        "&star=" + star + "&offset="+ offset + "&records=" + records + "&genre=" + genre, // Setting request url, which is mapped by StarsServlet in Stars.java
+        "&star=" + star + "&offset="+ offset + "&records=" + records + "&genre=" + genre +
+        "&sortTitle=" + sortTitle + "&sortRating=" + sortRating, // Setting request url, which is mapped by StarsServlet in Stars.java
     success: (resultData) => handleResult(resultData) // Setting callback function to handle data returned successfully by the SingleStarServlet
 });
