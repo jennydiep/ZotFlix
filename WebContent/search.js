@@ -12,17 +12,15 @@
 // let page = 0; // page starts at first
 // let numRecords = 10; // default records is 25
 
+function decrementPage()
+{
+    offset = (parseInt(offset) - 2 * parseInt(records)).toString(); // because I'm lazy
+    return incrementPage();
+}
+
 function incrementPage()
 {
-    // page++;
-    // console.log("page number: " + page);
-
-    // if offset is already at first/last page stay on same page
-    // if (offset < 0)
-
-
     offset = (parseInt(offset) + parseInt(records)).toString();
-    console.log("incrementPage() offset: " + offset);
 
     let temp = window.location.search;
     let tempArray = temp.split("&");
@@ -42,7 +40,6 @@ function incrementPage()
     }
     let url = window.location.pathname + result;
     url = decodeURIComponent(url);
-    console.log(url);
     return url;
 }
 
