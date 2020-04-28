@@ -36,13 +36,27 @@ public class SearchServlet extends HttpServlet {
         String director = request.getParameter("director");
         String star = request.getParameter("star");
         String genre = request.getParameter("genre");
+        String offset = request.getParameter("offset");
+        String records = request.getParameter("records");
 
+//        if (offset.equals(""))
+//        {
+//            offset = "0"; // default value (starts on the first page)
+//        }
+//        if (records.equals(""))
+//
+//        {
+//            records = "10"; // default value 10 records
+//        }
 
         System.out.println("title: " + title);
         System.out.println("year: " + year);
         System.out.println("director: " + director);
         System.out.println("star: " + star);
         System.out.println("genre: " + genre);
+        System.out.println("records: " + records);
+        System.out.println("offset: " + offset);
+
 
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
@@ -127,7 +141,9 @@ public class SearchServlet extends HttpServlet {
             String query =
                     "select m.id, m.title, director, stars, year, starIDs, genres, genreIDs, rating, numVotes " +
                     "from movies as m, advGenreSearch as ag left join ratings on ratings.movieId = ag.id " +
-                    "where m.id = ag.id";
+                    "where m.id = ag.id " +
+                    "limit " + records + " " +
+                    "offset " + offset;
             // add order by title ASC, rating DESC and LIMIT 10,10
 
             // Declare our statement

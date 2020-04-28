@@ -9,6 +9,38 @@
  *      3. Populate the data to correct html elements.
  */
 
+let page = 0; // page starts at first
+let numRecords = 10; // default records is 25
+
+function incrementPage()
+{
+    // page++;
+    // console.log("page number: " + page);
+
+    offset = (parseInt(offset) + parseInt(records)).toString();
+    console.log("incrementPage() offset: " + offset);
+
+    let temp = window.location.search;
+    let tempArray = temp.split("&");
+    let result = "";
+
+    for (let i = 0; i < tempArray.length; i++)
+    {
+        if (tempArray[i].split("=")[0] == "offset")
+        {
+            tempArray[i] = "offset=" + offset; // replacing previous offset with new offset
+        }
+    }
+    result = tempArray.join("&");
+    if (!result.includes("offset")) // doesn't have offset then just add it
+    {
+        result += "&offset=" + offset;
+    }
+    let url = window.location.pathname + result;
+    url = decodeURIComponent(url);
+    console.log(url);
+    return url;
+}
 
 /**
  * Retrieve parameter from request URL, matching by parameter name
@@ -89,8 +121,20 @@ function handleResult(resultData) {
         // Append the row created to the table body, which will refresh the page
         starSearchTableBodyElement.append(rowHTML);
     }
+    //
+    // let buttonsElement = jQuery("#buttons");
 
-
+    // let buttonsHTML = "";
+    // buttonsHTML += "<button onclick=\"location.href=/cs122b-spring20/\" type=\"button\">\n" +
+    //     "    Prev\n" +
+    //     "</button><br>\n" +
+    //     "<button onclick=\"location.herf=/cs122b-spring20/search.html?title=&year=&director=&star=&genre=6&offset=20/\" type=\"button\">\n" +
+    //     "    Next\n" +
+    //     "</button><br>\n";
+    //
+    // console.log(buttonsHTML);
+    //
+    // buttonsElement.append(buttonsHTML);
 
 }
 
@@ -126,20 +170,38 @@ let year = getParameterByName('year');
 let director = getParameterByName('director');
 let star = getParameterByName('star');
 let genre = getParameterByName("genre");
+let records = getParameterByName("records");
+let offset = getParameterByName("offset");
+
+if (offset == null)
+{
+    offset = "0"; // default starts of first page
+}
+if (records == null)
+{
+    records = "10"; // default has 10 records
+}
 if (genre == null)
 {
     genre = "";
 }
+
+
 console.log("title: " + title);
 console.log("year: " + year);
 console.log("director: " + director);
 console.log("star: " + star);
-console.log("genre: ", genre);
+console.log("genre: " + genre);
+// console.log("page: " + page);
+// console.log("numRecords: " + numRecords);
+console.log("records: " + records);
+console.log("offset: " + offset);
 
 // Makes the HTTP GET request and registers on success callback function handleResult
 jQuery.ajax({
     dataType: "json",  // Setting return data type
     method: "GET",// Setting request method
-    url: "api/search?title=" + title + "&year=" +  year + "&director=" + director +"&star=" + star + "&genre=" + genre, // Setting request url, which is mapped by StarsServlet in Stars.java
+    url: "api/search?title=" + title + "&year=" +  year + "&director=" + director +"" +
+        "&star=" + star + "&offset="+ offset + "&records=" + records + "&genre=" + genre, // Setting request url, which is mapped by StarsServlet in Stars.java
     success: (resultData) => handleResult(resultData) // Setting callback function to handle data returned successfully by the SingleStarServlet
 });

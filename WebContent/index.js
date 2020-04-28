@@ -15,6 +15,8 @@
  */
 function handleStarResult(resultData) {
     let starSearchInfoElement = jQuery("#titles");
+    // let offset = 10; // default offset and record values
+    // let records = 10;
 
     let alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
     let htmlAlpha = "";
