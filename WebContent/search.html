@@ -16,17 +16,19 @@
 
 <body>
 <!-- SearchServlet Form -->
-<button onclick="location.href=/cs122b-spring20/" type="button">
-    Home
-</button><br>
+
 <form id=search_form ACTION="search.html" METHOD="GET">
     Title: <input name="title" type="TEXT"><br>
     Year: <input name="year" type="TEXT"><br>
-    Director <input name="director" type="TEXT"><br>
-
+    Director: <input name="director" type="TEXT"><br>
+    Star: <input name="star" type="TEXT"><br>
     <input type="submit" VALUE="Search">
-
 </form>
+
+<button onclick="location.href=/cs122b-spring20/" type="button">
+    Home
+</button><br>
+
     <h3 id=search_info></h3>
 <table id=search_table class="table table-striped">
     <thead>

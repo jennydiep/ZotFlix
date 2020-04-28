@@ -116,14 +116,16 @@ function formatLinks(ids, names, link)
 let title = getParameterByName('title');
 let year = getParameterByName('year');
 let director = getParameterByName('director');
+let star = getParameterByName('star');
 console.log("title: " + title);
 console.log("year: " + year);
 console.log("director: " + director);
+console.log("star: " + star);
 
 // Makes the HTTP GET request and registers on success callback function handleResult
 jQuery.ajax({
     dataType: "json",  // Setting return data type
     method: "GET",// Setting request method
-    url: "api/search?title=" + title + "&year=" +  year + "&director=" + director, // Setting request url, which is mapped by StarsServlet in Stars.java
+    url: "api/search?title=" + title + "&year=" +  year + "&director=" + director +"&star=" + star, // Setting request url, which is mapped by StarsServlet in Stars.java
     success: (resultData) => handleResult(resultData) // Setting callback function to handle data returned successfully by the SingleStarServlet
 });

@@ -34,10 +34,12 @@ public class SearchServlet extends HttpServlet {
         String title = request.getParameter("title");
         String year = request.getParameter("year");
         String director = request.getParameter("director");
+        String star = request.getParameter("star");
 
-        System.out.println(title);
-        System.out.println(year);
-        System.out.println(director);
+        System.out.println("title: " + title);
+        System.out.println("year: " + year);
+        System.out.println("director: " + director);
+        System.out.println("star: " + star);
 
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
@@ -59,7 +61,7 @@ public class SearchServlet extends HttpServlet {
 
             queryViews1 +=
                     "and director like '%" + director + "%' " +
-                    "and s.name like '%%' " +
+                    "and s.name like '%" + star + "%' " +
                     "and s.id = sm.starId " +
                     "and sm.movieId = m.id " +
                     "group by m.id";
@@ -97,31 +99,6 @@ public class SearchServlet extends HttpServlet {
                     "select m.id, m.title, director, stars, year, starIDs, genres, genreIDs, rating, numVotes " +
                     "from movies as m, advGenreSearch as ag left join ratings on ratings.movieId = ag.id " +
                     "where m.id = ag.id";
-
-//            String query = "";
-//            query += " " +
-//                    "select title, year, director, starID, m.id, rating, numVotes, " +
-//                    "group_concat(distinct g.name) as \"genres\", " +
-//                    "group_concat(distinct genreId) as \"genreIDs\", " +
-//                    "group_concat(s.name) as \"stars\", " +
-//                    "group_concat(starId) as \"starIDs\" " +
-//                    "from movies as m, stars_in_movies as sm, stars as s, " +
-//                    "genres_in_movies as gm, genres as g, ratings as r " +
-//                    "where m.id = sm.movieId " +
-//                    "and sm.starId = s.id " +
-//                    "and gm.movieId = m.id " +
-//                    "and gm.genreId = g.id " +
-//                    "and r.movieId = m.id ";
-//
-//            query +=  "and title like '%" + title +"%' ";
-//            query += "and director like '%" + director + "%' ";
-//            if (!year.equals(""))
-//            {
-//                query += "and year = " + year + " ";
-//            }
-//            query += "group by m.id;";
-
-
 
             // Declare our statement
             PreparedStatement statementDrops1 = dbcon.prepareStatement("drop view if exists advancedSearch");
