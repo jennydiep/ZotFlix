@@ -52,7 +52,7 @@ public class SearchServlet extends HttpServlet {
             String queryViews1 = "create view advancedSearch as select title, " +
                     "m.id from stars_in_movies as sm, " +
                     "movies as m, stars as s " +
-                    "where title like '%" + title +"%' ";
+                    "where title like '" + title +"%' ";
 
             if (!year.equals(""))
             {
