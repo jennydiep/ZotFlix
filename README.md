@@ -1,8 +1,34 @@
 ## CS 122B Project 1: Fabflix
 
 ### Web Application URL: http://ec2-3-18-107-131.us-east-2.compute.amazonaws.com:8080/cs122b-spring20/
-### Demo Video: https://youtu.be/eDRB4Wmmwf0
-##### (Skip to 3:46 to skip populating db)
+### Demo Video: https://youtu.be/Kj-FAVjDlNA
+
+### substring matching 
+    title: any title that starts with "x"
+    director: has "x" in it
+    star: has "x" in it
+
+##
+
+#### Due to poor time management I was unable to finish project 2
+
+##### Thing I was able to get done:
+    sorting by title, rating
+    pagniation with next and prev buttons
+    browse by title, genre
+    sorted genres and stars on movielist page
+    display records
+    add to cart option for both movie list and single movie list
+    shopping cart and payment page
+    
+##### Things I was not able to finish
+    hyperlink genre and stars on single page
+    add or delete movies from cart
+    did not implement check for correct credit card information
+    did not implement recording sale
+    did not implement jump back to original movie list
+    
+    
 
 ##
 
