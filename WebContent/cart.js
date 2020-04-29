@@ -5,14 +5,13 @@ let cart = $("#cart");
  * @param resultDataString jsonObject, needs to be parsed to html
  */
 function handleCartArray(resultDataString) {
-    const resultArray = resultDataString.split(",");
-    console.log("cart: " + resultArray);
+    console.log("cart: " + resultDataString);
     let item_list = $("#item_list");
     // change it to html list
     let res = "<ul>";
-    for (let i = 0; i < resultArray.length; i++) {
+    for (let i = 0; i < resultDataString.length; i++) {
         // each item will be in a bullet point
-        res += "<li>" + resultArray[i] + "</li>";
+        res += "<li>" + resultDataString[i]["movieTitle"] + "</li>";
     }
     res += "</ul>";
 
