@@ -142,26 +142,15 @@ function handleResult(resultData) {
 
 
         rowHTML += "<th>" + resultData[i]["rating"] + "</th>";
-        rowHTML += "</tr>";
+        let temp = "/cs122b-spring20/api/items?item=" + resultData[i]["id"];
+        rowHTML += "<th><button onclick=location.href='" + temp + "' >Add to Cart</button></th>";
 
+        rowHTML += "</tr>";
         // Append the row created to the table body, which will refresh the page
         starSearchTableBodyElement.append(rowHTML);
+
+
     }
-    //
-    // let buttonsElement = jQuery("#buttons");
-
-    // let buttonsHTML = "";
-    // buttonsHTML += "<button onclick=\"location.href=/cs122b-spring20/\" type=\"button\">\n" +
-    //     "    Prev\n" +
-    //     "</button><br>\n" +
-    //     "<button onclick=\"location.herf=/cs122b-spring20/search.html?title=&year=&director=&star=&genre=6&offset=20/\" type=\"button\">\n" +
-    //     "    Next\n" +
-    //     "</button><br>\n";
-    //
-    // console.log(buttonsHTML);
-    //
-    // buttonsElement.append(buttonsHTML);
-
 }
 
 function formatLinks(ids, names, link)
@@ -210,6 +199,7 @@ function setSortOption(sortby, option)
     url = decodeURIComponent(url);
     return url;
 }
+
 
 /**
  * Once this .js is loaded, following scripts will be executed by the browser\

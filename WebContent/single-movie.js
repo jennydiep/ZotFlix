@@ -115,6 +115,9 @@ function handleResult(resultData) {
 
 // Get id from URL
 let movieId = getParameterByName('id');
+let movieListBtn = jQuery("#movieListBtn");
+
+// movieListBtn.append("<>")
 
 // Makes the HTTP GET request and registers on success callback function handleResult
 jQuery.ajax({

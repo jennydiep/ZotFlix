@@ -42,6 +42,23 @@ function handleStarResult(resultData) {
     genreInfoElement.append(htmlGenres);
 }
 
+/**
+ * Handle the data returned by IndexServlet
+ * @param resultDataString jsonObject, consists of session info
+ */
+function handleSessionData(resultDataString) {
+    let resultDataJson = JSON.parse(resultDataString);
+
+    console.log("handle session response");
+    console.log(resultDataJson);
+    console.log(resultDataJson["sessionID"]);
+
+    // show the session information
+    $("#sessionID").text("Session ID: " + resultDataJson["sessionID"]);
+    $("#lastAccessTime").text("Last access time: " + resultDataJson["lastAccessTime"]);
+
+}
+
 
 /**
  * Once this .js is loaded, following scripts will be executed by the browser
@@ -54,3 +71,11 @@ jQuery.ajax({
     url: "api/genres", // Setting request url, which is mapped by StarsServlet in Stars.java
     success: (resultData) => handleStarResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
 });
+
+//when user logs in get session
+$.ajax("api/session", {
+    method: "GET",
+    success: handleSessionData
+});
+
+

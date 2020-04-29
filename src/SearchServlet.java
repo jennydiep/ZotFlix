@@ -41,26 +41,6 @@ public class SearchServlet extends HttpServlet {
         String sortTitle = request.getParameter("sortTitle");
         String sortRating = request.getParameter("sortRating");
 
-        //set default sorting
-//        if (sortTitle == null)
-//        {
-//            sortTitle = "ASC";
-//        }
-//        if (sortRating == null)
-//        {
-//            sortRating = "ASC";
-//        }
-//
-//        if (offset == null)
-//        {
-//            offset = "0"; // default value (starts on the first page)
-//        }
-//        if (records == null)
-//
-//        {
-//            records = "10"; // default value 10 records
-//        }
-
         System.out.println("title: " + title);
         System.out.println("year: " + year);
         System.out.println("director: " + director);
