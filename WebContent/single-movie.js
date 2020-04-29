@@ -91,22 +91,10 @@ function handleResult(resultData) {
     }
     movieInfoElement.append(HTMLgenres);
 
-    // Populate the movie table
-    // Find the empty table body by id "movie_table_body"
-    // let movieTableBodyElement = jQuery("#movie_table_body");
-
-    // Concatenate the html tags with resultData jsonObject to create table rows
-    // for (let i = 0; i < Math.min(10, resultData.length); i++) {
-    //     let rowHTML = "";
-    //     rowHTML += "<tr>";
-    //     rowHTML += "<th>" + resultData[i]["movie_title"] + "</th>";
-    //     rowHTML += "<th>" + resultData[i]["movie_year"] + "</th>";
-    //     rowHTML += "<th>" + resultData[i]["movie_director"] + "</th>";
-    //     rowHTML += "</tr>";
-    //
-    //     // Append the row created to the table body, which will refresh the page
-    //     movieTableBodyElement.append(rowHTML);
-    // }
+    console.log("handling adding to cart");
+    let addCartElement = jQuery("#addCart");
+    let html = "<button onclick='handleAddCart(\"" + movieId + "\")'>Add to Cart</button>"
+    addCartElement.append(html);
 }
 
 /**
@@ -126,3 +114,13 @@ jQuery.ajax({
     url: "api/single-movie?id=" + movieId, // Setting request url, which is mapped by StarsServlet in Stars.java
     success: (resultData) => handleResult(resultData) // Setting callback function to handle data returned successfully by the SingleStarServlet
 });
+
+function handleAddCart(movieId) {
+    console.log("handling add to cart");
+
+    jQuery.ajax({
+        dataType: "json", // Setting return data type
+        method: "GET", // Setting request method
+        url: "api/items" + "?item=" + movieId, // Setting request url, which is mapped by StarsServlet in Stars.java
+    });
+}

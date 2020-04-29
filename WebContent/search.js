@@ -143,7 +143,10 @@ function handleResult(resultData) {
 
         rowHTML += "<th>" + resultData[i]["rating"] + "</th>";
         let temp = "/cs122b-spring20/api/items?item=" + resultData[i]["id"];
-        rowHTML += "<th><button onclick=location.href='" + temp + "' >Add to Cart</button></th>";
+        let alert = "'Added to cart'";
+
+        // rowHTML += "<th><button type=button onclick=location.href='" + temp + "' >Add to Cart</button></th>";
+        rowHTML += "<th><button onclick=handleAddCart(\"" + resultData[i]["id"] + "\") >Add to Cart</button>"
 
         rowHTML += "</tr>";
         // Append the row created to the table body, which will refresh the page
@@ -257,3 +260,14 @@ jQuery.ajax({
         "&sortTitle=" + sortTitle + "&sortRating=" + sortRating, // Setting request url, which is mapped by StarsServlet in Stars.java
     success: (resultData) => handleResult(resultData) // Setting callback function to handle data returned successfully by the SingleStarServlet
 });
+
+function handleAddCart(movieId)
+{
+    console.log("handling add to cart");
+
+    jQuery.ajax({
+        dataType: "json", // Setting return data type
+        method: "GET", // Setting request method
+        url: "api/items" + "?item=" + movieId, // Setting request url, which is mapped by StarsServlet in Stars.java
+    });
+}

@@ -93,9 +93,14 @@ public class ItemsServlet extends HttpServlet {
                 jsonObject.addProperty("movieId", movieId);
                 jsonObject.addProperty("movieTitle", movieTitle);
 
-                if (previousItems == null) {
+
+                if (previousItems == null) { // item does not exist therefore quantity = 1
+//                    int quantity = 1;
+//                    jsonObject.addProperty("quantity", quantity);
+
                     previousItems = new JsonArray();
                     previousItems.add(jsonObject);
+
                     session.setAttribute("previousItems", previousItems);
                 } else {
                     // prevent corrupted states through sharing under multi-threads
