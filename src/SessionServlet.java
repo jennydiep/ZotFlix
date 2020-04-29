@@ -27,6 +27,7 @@ public class SessionServlet extends HttpServlet {
         JsonObject responseJsonObject = new JsonObject();
         responseJsonObject.addProperty("sessionID", sessionId);
         responseJsonObject.addProperty("lastAccessTime", new Date(lastAccessTime).toString());
+//        responseJsonObject.addProperty("movieList", "/cs122b-spring20/");
         // write all the data into the jsonObject
         response.getWriter().write(responseJsonObject.toString());
     }
