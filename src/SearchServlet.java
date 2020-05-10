@@ -81,7 +81,7 @@ public class SearchServlet extends HttpServlet {
 
             if (!year.equals(""))
             {
-                queryViews1 += "and year = " + year + " ";
+                queryViews1 += "and year = '" + year + "' ";
             }
 
             if (!director.equals(""))
@@ -149,6 +149,10 @@ public class SearchServlet extends HttpServlet {
             PreparedStatement statementDrops5 = dbcon.prepareStatement("drop view if exists advGenreSearch");
 
             PreparedStatement statement = dbcon.prepareStatement(query);
+
+
+
+
             PreparedStatement statementViews1 = dbcon.prepareStatement(queryViews1);
             PreparedStatement statementViews2 = dbcon.prepareStatement(queryViews2);
             PreparedStatement statementViews3 = dbcon.prepareStatement(queryViews3);

@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -30,38 +31,6 @@ public class ItemsServlet extends HttpServlet {
 
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-//        String item = request.getParameter("item");
-//        HttpSession session = request.getSession();
-//        System.out.println("item: " + item);
-//        // get the previous items in a ArrayList
-//        ArrayList<String> previousItems = (ArrayList<String>) session.getAttribute("previousItems");
-//
-//        if (item != null) // if item is null ignore request
-//        {
-//                if (previousItems == null) {
-//                    previousItems = new ArrayList<>();
-//                    previousItems.add(item);
-//                    session.setAttribute("previousItems", previousItems);
-//                } else {
-//        // prevent corrupted states through sharing under multi-threads
-//        // will only be executed by one thread at a time
-//                    synchronized (previousItems) {
-//                        previousItems.add(item);
-//                    }
-//                }
-//        }
-//        ArrayList<String> cartList = previousItems;
-//        JsonArray jsonArray= new JsonArray();
-//        for (int i = 0; i < cartList.size(); i++)
-//        {
-//            JsonObject jsonObject = new JsonObject();
-//            jsonObject.addProperty("movieId", cartList.get(i));
-//            jsonArray.add(jsonObject);
-//
-//        }
-//
-//        System.out.println(previousItems);
-//        response.getWriter().write(jsonArray.toString());
 
         response.setContentType("application/json"); // Response mime type
         String item = request.getParameter("item");
@@ -75,11 +44,16 @@ public class ItemsServlet extends HttpServlet {
 
             // Get a connection from dataSource
             Connection dbcon = dataSource.getConnection();
+
+            String query = "SELECT * from movies where id = ?";
+
             // Declare our statement
-            Statement statement = dbcon.createStatement();
-            String query = "SELECT * from movies where id = '" + item +"'";
+            PreparedStatement statement = dbcon.prepareStatement(query);
+
+            statement.setString(1, item);
+
             // Perform the query
-            ResultSet rs = statement.executeQuery(query);
+            ResultSet rs = statement.executeQuery();
             rs.next();
 
             if (item != null) // if item is null ignore request

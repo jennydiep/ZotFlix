@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -43,16 +44,21 @@ public class PaymentServlet extends HttpServlet {
             // Get a connection from dataSource
             Connection dbcon = dataSource.getConnection();
 
-            // Declare our statement
-            Statement statement = dbcon.createStatement();
+            String query = "Select * from creditcards where id = ? " +
+                                " and firstName = ?" +
+                                " and lastName = ? " +
+                                " and expiration = ? ";
 
-            String query = "SELECT * from creditcards where id =" + ccId +
-                    " and firstName = " + firstName +
-                    " and lastName = " + lastName +
-                    " and expiration = " + expDate;
+            // Declare our statement
+            PreparedStatement statement = dbcon.prepareStatement(query);
+
+            statement.setString(1, ccId);
+            statement.setString(2, firstName);
+            statement.setString(3, lastName);
+            statement.setString(4, expDate);
 
             // Perform the query
-            ResultSet rs = statement.executeQuery(query);
+            ResultSet rs = statement.executeQuery();
 
             JsonArray jsonArray = new JsonArray();
 

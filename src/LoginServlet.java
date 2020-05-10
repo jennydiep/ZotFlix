@@ -10,6 +10,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -34,11 +35,18 @@ public class LoginServlet extends HttpServlet {
             Connection dbcon = dataSource.getConnection();
 
             // Declare our statement
-            Statement statement = dbcon.createStatement();
-            String query = String.format("SELECT email, password from customers where email = '%s'", username);
+
+            String query = "SELECT email, password from customers where email = ?";
+
+            // Declare our statement
+            PreparedStatement statement = dbcon.prepareStatement(query);
+
+            // Set the parameter represented by "?" in the query to the id we get from url,
+            // num 1 indicates the first "?" in the query
+            statement.setString(1, username);
 
             // Perform the query
-            ResultSet rs = statement.executeQuery(query);
+            ResultSet rs = statement.executeQuery();
 
             JsonObject responseJsonObject = new JsonObject();
 

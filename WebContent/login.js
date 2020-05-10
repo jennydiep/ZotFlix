@@ -36,6 +36,8 @@ function submitLoginForm(formSubmitEvent) {
      */
     formSubmitEvent.preventDefault();
 
+    console.log(login_form.serialize());
+
     $.ajax(
         "api/login", {
             method: "POST",
