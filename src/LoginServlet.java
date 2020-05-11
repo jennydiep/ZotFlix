@@ -2,6 +2,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -51,7 +52,9 @@ public class LoginServlet extends HttpServlet {
             JsonObject responseJsonObject = new JsonObject();
 
             if (rs.next() != false) {
-                if (password.equals(rs.getString("password"))) {
+                VerifyPassword verify = new VerifyPassword();
+//                System.out.println(verify.verifyCredentials(username, password));
+                if (verify.verifyCredentials(username, password)) {
                     // Login success:
 
                     // set this user into the session
@@ -70,6 +73,17 @@ public class LoginServlet extends HttpServlet {
             {
                 responseJsonObject.addProperty("status", "fail");
                 responseJsonObject.addProperty("message", "email does not exist");
+            }
+
+            try {
+                // recaptcha response
+                String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+                System.out.println("gRecaptchaResponse=" + gRecaptchaResponse);
+                // Vertify reCAPTCHA
+                RecaptchaVerifyUtils.verify(gRecaptchaResponse);
+            } catch (Exception e) {
+                responseJsonObject.addProperty("status", "fail");
+                responseJsonObject.addProperty("message", "reCaptcha failed");
             }
 
             // write JSON string to output

@@ -17,14 +17,14 @@ public class VerifyPassword {
 	 * Note that you need to use the same StrongPasswordEncryptor when encrypting the passwords
 	 * 
 	 */
-	public static void main(String[] args) throws Exception {
+//	public static void main(String[] args) throws Exception {
+//
+//		System.out.println(verifyCredentials("a@email.com", "a2"));
+//		System.out.println(verifyCredentials("a@email.com", "a3"));
+//
+//	}
 
-		System.out.println(verifyCredentials("a@email.com", "a2"));
-		System.out.println(verifyCredentials("a@email.com", "a3"));
-
-	}
-
-	private static boolean verifyCredentials(String email, String password) throws Exception {
+	static boolean verifyCredentials(String email, String password) throws Exception {
 		
 		String loginUser = "mytestuser";
 		String loginPasswd = "mypassword";

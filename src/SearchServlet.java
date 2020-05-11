@@ -10,6 +10,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Enumeration;
 
 /**
@@ -41,6 +42,13 @@ public class SearchServlet extends HttpServlet {
         String sortTitle = request.getParameter("sortTitle");
         String sortRating = request.getParameter("sortRating");
 
+        ArrayList<String> elements = new ArrayList<String>();
+        elements.add(title);
+        elements.add(year);
+        elements.add(director);
+        elements.add(star);
+        elements.add(genre);
+
         System.out.println("title: " + title);
         System.out.println("year: " + year);
         System.out.println("director: " + director);
@@ -59,6 +67,14 @@ public class SearchServlet extends HttpServlet {
             // Create a new connection to database
             Connection dbcon = dataSource.getConnection();
 
+            // creating arraylist to store which parameters are used
+            // for dynamic query, 1 means it is used, 0 means it is not used.
+            ArrayList<Integer> parameters = new ArrayList<Integer>();
+            for (int i = 0; i < 5; i++)
+            {
+                parameters.add(0);
+            }
+
             // Generate a SQL query
             String queryViews1 = "create view advancedSearch as " +
                     "select title, m.id from stars_in_movies as sm, " +
@@ -76,27 +92,32 @@ public class SearchServlet extends HttpServlet {
             }
             else if (!title.equals("")) // don't include title in query if it is not used
             {
-                queryViews1 += "and title like '" + title + "%' ";
+                queryViews1 += "and title like ? ";
+                parameters.set(0, 1);
             }
 
             if (!year.equals(""))
             {
-                queryViews1 += "and year = '" + year + "' ";
+                queryViews1 += "and year = ? ";
+                parameters.set(1, 1);
             }
 
             if (!director.equals(""))
             {
-                queryViews1 += "and director like '%" + director + "%' ";
+                queryViews1 += "and director like ? ";
+                parameters.set(2, 1);
             }
 
             if (!star.equals(""))
             {
-                queryViews1 += "and s.name like '%" + star + "%' ";
+                queryViews1 += "and s.name like ? ";
+                parameters.set(3, 1);
             }
 
             if (!genre.equals(""))
             {
-                queryViews1 += "and g.id = " + genre + " ";
+                queryViews1 += "and g.id = ? ";
+                parameters.set(4, 1);
             }
 
             queryViews1 += "group by m.id";
@@ -132,14 +153,23 @@ public class SearchServlet extends HttpServlet {
                     "and ss.id = gm.movieId " +
                     "group by ss.id ";
 
+            if (!sortTitle.equals("ASC"))
+            {
+                sortTitle = "DESC"; // to prevent SQL injection
+            }
+
+            if (!sortRating.equals("ASC"))
+            {
+                sortRating = "DESC"; // to prevent SQL injection
+            }
+
             String query =
                     "select m.id, m.title, director, stars, year, starIDs, genres, genreIDs, rating, numVotes " +
                     "from movies as m, advGenreSearch as ag left join ratings on ratings.movieId = ag.id " +
                     "where m.id = ag.id " +
                     "order by title " + sortTitle + ", rating " + sortRating + " " +
-                    "limit " + records + " " +
-                    "offset " + offset;
-            // add order by title ASC, rating DESC and LIMIT 10,10
+                    "limit ? " +
+                    "offset ? ";
 
             // Declare our statement
             PreparedStatement statementDrops1 = dbcon.prepareStatement("drop view if exists advancedSearch");
@@ -150,10 +180,30 @@ public class SearchServlet extends HttpServlet {
 
             PreparedStatement statement = dbcon.prepareStatement(query);
 
-
+            statement.setInt(1, Integer.parseInt(records));
+            statement.setInt(2, Integer.parseInt(offset));
 
 
             PreparedStatement statementViews1 = dbcon.prepareStatement(queryViews1);
+
+            for (int i = 0; i < 5; i++)
+            {
+                int index = i + 1;
+                if (parameters.get(i).equals(1)) {
+                    if (i != 1 && i != 0)
+                    // if parameter included and is not year nor title
+                    {
+                        statementViews1.setString(index, "%" + elements.get(i) + "%");
+                    } else if (i == 1) {
+                        int temp = Integer.parseInt(year);
+                        statementViews1.setInt(index, temp);
+                    } else if (i == 0)
+                    {
+                        statementViews1.setString(index, title + "%");
+                    }
+                }
+            }
+
             PreparedStatement statementViews2 = dbcon.prepareStatement(queryViews2);
             PreparedStatement statementViews3 = dbcon.prepareStatement(queryViews3);
             PreparedStatement statementViews4 = dbcon.prepareStatement(queryViews4);

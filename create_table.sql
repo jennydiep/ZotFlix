@@ -56,6 +56,19 @@ CREATE TABLE IF NOT EXISTS customers(
 	primary key (id)
 );
 
+-- CREATE TABLE IF NOT EXISTS customers_backup(
+-- 	id int auto_increment not null,
+--     firstName varchar(50) default '',
+--     lastName varchar(50) default '',
+--     ccId varchar(20) default '',
+--     address varchar(200) default '',
+--     email varchar(50) default '',
+--     password varchar(128) default '',
+--     foreign key (ccId) references creditcards(id),
+-- 	primary key (id)
+-- );
+-- insert into customer_backup select * from customers;
+
 CREATE TABLE IF NOT EXISTS sales(
 	id int auto_increment not null,
     customerId int not null,
