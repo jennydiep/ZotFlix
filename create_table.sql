@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS customers(
 --     foreign key (ccId) references creditcards(id),
 -- 	primary key (id)
 -- );
--- insert into customer_backup select * from customers;
+-- insert into customers_backup select * from customers;
 
 CREATE TABLE IF NOT EXISTS sales(
 	id int auto_increment not null,
