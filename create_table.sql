@@ -87,6 +87,12 @@ CREATE TABLE IF NOT EXISTS ratings(
     foreign key (movieId) references movies(id)
 );
 
+CREATE TABLE IF NOT EXISTS employees(
+	email varchar(50) primary key,
+	password varchar(20) not null,
+	fullname varchar(100)
+);
+
 -- gets top 20 movies sorted by rating
 DROP VIEW IF EXISTS top20movies;
 CREATE VIEW top20movies as

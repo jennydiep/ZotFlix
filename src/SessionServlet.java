@@ -23,8 +23,11 @@ public class SessionServlet extends HttpServlet {
         HttpSession session = request.getSession();
         String sessionId = session.getId();
         long lastAccessTime = session.getLastAccessedTime();
+        User currentUser = (User) session.getAttribute("user");
 
         JsonObject responseJsonObject = new JsonObject();
+        responseJsonObject.addProperty("currentUser", currentUser.getUsername());
+        responseJsonObject.addProperty("admin", currentUser.getAdmin());
         responseJsonObject.addProperty("sessionID", sessionId);
         responseJsonObject.addProperty("lastAccessTime", new Date(lastAccessTime).toString());
 //        responseJsonObject.addProperty("movieList", "/cs122b-spring20/");

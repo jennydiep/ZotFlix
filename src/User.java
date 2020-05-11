@@ -5,9 +5,18 @@
 public class User {
 
     private final String username;
+    private final Boolean admin;
 
-    public User(String username) {
+    public User(String username, Boolean admin) {
         this.username = username;
+        this.admin = admin;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public Boolean getAdmin() {
+        return admin;
+    }
 }

@@ -24,7 +24,7 @@ public class LoginServlet extends HttpServlet {
     @Resource(name = "jdbc/moviedb")
     private DataSource dataSource;
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
@@ -34,32 +34,31 @@ public class LoginServlet extends HttpServlet {
         try {
             // Get a connection from dataSource
             Connection dbcon = dataSource.getConnection();
-
             // Declare our statement
-
             String query = "SELECT email, password from customers where email = ?";
-
             // Declare our statement
             PreparedStatement statement = dbcon.prepareStatement(query);
-
             // Set the parameter represented by "?" in the query to the id we get from url,
             // num 1 indicates the first "?" in the query
             statement.setString(1, username);
-
             // Perform the query
             ResultSet rs = statement.executeQuery();
 
+            String queryEmp = "SELECT email, password from employees where email = ?";
+            PreparedStatement statementEmp = dbcon.prepareStatement(queryEmp);
+            statementEmp.setString(1, username);
+            ResultSet rsEmp = statementEmp.executeQuery();
+
             JsonObject responseJsonObject = new JsonObject();
+            VerifyPassword verify = new VerifyPassword();
 
             if (rs.next() != false) {
-                VerifyPassword verify = new VerifyPassword();
 //                System.out.println(verify.verifyCredentials(username, password));
                 if (verify.verifyCredentials(username, password)) {
                     // Login success:
 
                     // set this user into the session
-                    request.getSession().setAttribute("user", new User(username));
-
+                    request.getSession().setAttribute("user", new User(username, false));
                     responseJsonObject.addProperty("status", "success");
                     responseJsonObject.addProperty("message", "success");
                 } else // Login failed
@@ -67,6 +66,15 @@ public class LoginServlet extends HttpServlet {
                     responseJsonObject.addProperty("status", "fail");
                     responseJsonObject.addProperty("message", "incorrect password/email");
 
+                }
+            }
+            else if (rsEmp.next() != false) // check employees
+            {
+                if (password.equals(rsEmp.getString("password")))
+                {
+                    request.getSession().setAttribute("user", new User(username, true));
+                    responseJsonObject.addProperty("status", "success");
+                    responseJsonObject.addProperty("message", "success");
                 }
             }
             else
@@ -107,5 +115,8 @@ public class LoginServlet extends HttpServlet {
 
         }
         out.close();
+    }
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        doGet(request, response);
     }
 }
