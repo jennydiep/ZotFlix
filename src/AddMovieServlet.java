@@ -56,23 +56,22 @@ public class AddMovieServlet extends HttpServlet {
 
             JsonObject responseJsonObject = new JsonObject();
 
-            if (rs.getString("movieId").equals("null")) // movie already exists
-            {
-                responseJsonObject.addProperty("status", "fail");
-                responseJsonObject.addProperty("message", "failed to add movie");
-            }
-            else // insert successful
+            if (rs.next() && !rs.getString("movieId").equals(null)) // insert successful
             {
                 String starId = rs.getString("starId");
                 String movieId = rs.getString("movieId");
                 String genreId = rs.getString("genreId");
-
 
                 responseJsonObject.addProperty("status", "success");
                 responseJsonObject.addProperty("message", "success");
                 responseJsonObject.addProperty("starId", starId);
                 responseJsonObject.addProperty("movieId", movieId);
                 responseJsonObject.addProperty("genreId", genreId);
+            }
+            else // movie already exists
+            {
+                responseJsonObject.addProperty("status", "fail");
+                responseJsonObject.addProperty("message", "failed to add movie");
             }
 
 
@@ -90,9 +89,11 @@ public class AddMovieServlet extends HttpServlet {
             JsonObject jsonObject = new JsonObject();
 
             jsonObject.addProperty("errorMessage", e.getMessage());
+            jsonObject.addProperty("status", "fail");
+            jsonObject.addProperty("message", "failed to add movie");
             out.write(jsonObject.toString());
             // set response status to 500 (Internal Server Error)
-            response.setStatus(500);
+//            response.setStatus(500);
 
         }
         out.close();
