@@ -27,10 +27,6 @@
     <input type="submit" value="Add Star">
 </form>
 
-<h2 id=dash>Access Denied</h2>
-
-<div id="star_form_message"></div>
-
 <br><br>
 
 <form id="movie_form" method="get" action="#">
@@ -61,6 +57,12 @@
     <br>
     <input type="submit" value="Add Movie">
 </form>
+
+<h2 id=dash>Access Denied</h2>
+
+<div id="star_form_message"></div>
+
+<br><br>
 
 <h3 id="metadata"></h3>
 
