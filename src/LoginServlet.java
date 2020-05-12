@@ -83,16 +83,16 @@ public class LoginServlet extends HttpServlet {
                 responseJsonObject.addProperty("message", "email does not exist");
             }
 
-//            try {
-//                // recaptcha response
-//                String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
-//                System.out.println("gRecaptchaResponse=" + gRecaptchaResponse);
-//                // Vertify reCAPTCHA
-//                RecaptchaVerifyUtils.verify(gRecaptchaResponse);
-//            } catch (Exception e) {
-//                responseJsonObject.addProperty("status", "fail");
-//                responseJsonObject.addProperty("message", "reCaptcha failed");
-//            }
+            try {
+                // recaptcha response
+                String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+                System.out.println("gRecaptchaResponse=" + gRecaptchaResponse);
+                // Vertify reCAPTCHA
+                RecaptchaVerifyUtils.verify(gRecaptchaResponse);
+            } catch (Exception e) {
+                responseJsonObject.addProperty("status", "fail");
+                responseJsonObject.addProperty("message", "reCaptcha failed");
+            }
 
             // write JSON string to output
             out.write(responseJsonObject.toString());
