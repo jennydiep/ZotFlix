@@ -93,6 +93,8 @@ CREATE TABLE IF NOT EXISTS employees(
 	fullname varchar(100)
 );
 
+-- INSERT INTO employees values("classta@email.edu", "classta", "TA CS122B");
+
 -- gets top 20 movies sorted by rating
 DROP VIEW IF EXISTS top20movies;
 CREATE VIEW top20movies as
@@ -140,31 +142,3 @@ order by count(*) DESC;
 
 SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
 
-
--- test
--- select * from top20;
-
--- select * from movies LIMIT 20;
-
-
--- select * 
--- from temp join temp2;
-
--- -- -- group by m.id
-
--- select *
--- from movies as m
--- where m.id = 'tt0424773';
-
-
-
-
--- SELECT * FROM movies;
--- SELECT * FROM stars;
--- SELECT * FROM stars_in_movies;
--- SELECT * FROM genres;
--- SELECT * FROM genres_in_movies;
--- SELECT * FROM customers;
--- SELECT * FROM sales;
--- SELECT * FROM creditcards;
--- SELECT * FROM ratings;

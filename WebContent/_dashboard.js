@@ -8,6 +8,8 @@
  *      2. Populate the data to correct html elements.
  */
 
+let star_form = $("#star_form");
+let movie_form = $("#movie_form");
 
 /**
  * Handles the data returned by the API, read the jsonObject and populate data into html elements
@@ -17,8 +19,6 @@ function handleMetaDataResult(resultData) {
     let metaDataElement = jQuery("#metadata");
 
     let html = "";
-
-
 
     for (let i = 0; i < resultData.length; i++)
     {
@@ -30,10 +30,13 @@ function handleMetaDataResult(resultData) {
         }
         html += "<br><br>"
     }
-
-    console.log(html);
-
     metaDataElement.append(html);
+
+    star_form.show();
+
+    // document.getElementById("starName").style.visibility="visible";
+    // document.getElementById("starYear").style.visibility="visible";
+    // document.getElementById("starButton").style.visibility="visible";
 
 }
 
@@ -45,15 +48,101 @@ function handleSessionData(resultDataString) {
     let resultDataJson = JSON.parse(resultDataString);
 
     console.log("handle session response");
-    console.log(resultDataJson);
-    console.log(resultDataJson["sessionID"]);
-
-    console.log(resultDataJson["currentUser"]);
-    console.log(resultDataJson["admin"]);
+    // console.log(resultDataJson);
+    // console.log(resultDataJson["sessionID"]);
+    //
+    // console.log(resultDataJson["currentUser"]);
+    // console.log(resultDataJson["admin"]);
 
     if (resultDataJson["admin"])
     {
-        $("#dash").text("Tables")
+        console.log("admin success");
+        $("#dash").text("Tables");
+    }
+    else
+    {
+        console.log("access denied");
+        window.location.replace("index.html");
+
+    }
+
+}
+
+function submitAddStarForm(formSubmitEvent) {
+    console.log("submit add star form");
+    /**
+     * When users click the submit button, the browser will not direct
+     * users to the url defined in HTML form. Instead, it will call this
+     * event handler when the event is triggered.
+     */
+    formSubmitEvent.preventDefault();
+
+    console.log(star_form.serialize());
+
+    $.ajax(
+        "api/dashboard", {
+            method: "GET",
+            // Serialize the login form to the data sent by POST request
+            data: star_form.serialize(),
+            success: handleAddStarResult
+        }
+    );
+}
+
+function submitAddMovieForm(formSubmitEvent) {
+    console.log("submit add movie form");
+    /**
+     * When users click the submit button, the browser will not direct
+     * users to the url defined in HTML form. Instead, it will call this
+     * event handler when the event is triggered.
+     */
+    formSubmitEvent.preventDefault();
+
+    console.log(movie_form.serialize());
+
+    $.ajax(
+        "api/addMovie", {
+            method: "GET",
+            // Serialize the login form to the data sent by POST request
+            data: movie_form.serialize(),
+            success: handleAddMovieResult
+        }
+    );
+}
+
+function handleAddMovieResult(resultDataString) {
+    let resultDataJson = JSON.parse(resultDataString);
+
+    console.log("handle add movie response");
+    if (resultDataJson["status"] === "success") {
+        // window.location.replace("index.html");
+        console.log("Added movie");
+        window.alert("Added movie\n" +
+            "movieId = " + resultDataJson["starId"] +
+            ", starId = " + resultDataJson["starId"] +
+            ", genreId = " + resultDataJson["genreId"]);
+    }
+    else
+    {
+        console.log("Error, movie was not added");
+        window.alert("Error, movie was not added");
+    }
+
+}
+
+function handleAddStarResult(resultDataString) {
+    let resultDataJson = JSON.parse(resultDataString);
+
+    console.log("handle add star response");
+    if (resultDataJson["status"] === "success") {
+        // window.location.replace("index.html");
+        console.log("Added star");
+        window.alert("Added Star, id = " + resultDataJson["starId"]);
+    }
+    else
+    {
+        console.log("Error, star was not added");
+        window.alert("Error, star was not added");
     }
 
 }
@@ -63,6 +152,13 @@ function handleSessionData(resultDataString) {
  * Once this .js is loaded, following scripts will be executed by the browser
  */
 
+//when user logs in get session
+$.ajax("api/session", {
+    method: "GET",
+    success: handleSessionData
+});
+
+
 // Makes the HTTP GET request and registers on success callback function handleStarResult
 jQuery.ajax({
     dataType: "json", // Setting return data type
@@ -71,10 +167,7 @@ jQuery.ajax({
     success: (resultData) => handleMetaDataResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
 });
 
-//when user logs in get session
-$.ajax("api/session", {
-    method: "GET",
-    success: handleSessionData
-});
 
-
+// Bind the submit action of the form to a handler function
+star_form.submit(submitAddStarForm);
+movie_form.submit(submitAddMovieForm);

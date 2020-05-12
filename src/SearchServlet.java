@@ -186,20 +186,25 @@ public class SearchServlet extends HttpServlet {
 
             PreparedStatement statementViews1 = dbcon.prepareStatement(queryViews1);
 
+            System.out.println("Parameters: " + parameters.toString());
+
+            int index = 1;
             for (int i = 0; i < 5; i++)
             {
-                int index = i + 1;
                 if (parameters.get(i).equals(1)) {
-                    if (i != 1 && i != 0)
-                    // if parameter included and is not year nor title
-                    {
-                        statementViews1.setString(index, "%" + elements.get(i) + "%");
-                    } else if (i == 1) {
-                        int temp = Integer.parseInt(year);
+                    System.out.println("parameters.get(i)  " + parameters.get(i).toString() );
+                    if (i == 1 || i == 4) {
+                        int temp = Integer.parseInt(elements.get(i));
+                        System.out.println("index: " + index);
                         statementViews1.setInt(index, temp);
+                        index++;
                     } else if (i == 0)
                     {
                         statementViews1.setString(index, title + "%");
+                    }
+                    else
+                    {
+                        statementViews1.setString(index, "%" + elements.get(i) + "%");
                     }
                 }
             }
