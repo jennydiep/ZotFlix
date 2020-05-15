@@ -19,8 +19,8 @@ import java.util.Enumeration;
  */
 
 // Declaring a WebServlet called FormServlet, which maps to url "/search"
-@WebServlet(name = "SearchServlet", urlPatterns = "/api/search")
-public class SearchServlet extends HttpServlet {
+@WebServlet(name = "AdvancedSearchServlet", urlPatterns = "/api/search")
+public class AdvancedSearchServlet extends HttpServlet {
 
     // Create a dataSource which registered in web.xml
     @Resource(name = "jdbc/moviedb")
@@ -42,12 +42,25 @@ public class SearchServlet extends HttpServlet {
         String sortTitle = request.getParameter("sortTitle");
         String sortRating = request.getParameter("sortRating");
 
+
+        title = (title==null) ? "" : title;
+        year = (year==null) ? "" : year;
+        director = (director==null) ? "" : director;
+        star = (star==null) ? "" : star;
+        genre = (genre==null) ? "" : genre;
+        offset = (offset==null) ? "0" : offset;
+        records = (records==null) ? "10" : records;
+        sortTitle = (sortTitle==null) ? "ASC" : sortTitle;
+        sortRating = (sortRating==null) ? "ASC" : sortRating;
+
         ArrayList<String> elements = new ArrayList<String>();
-        elements.add(title);
+        elements.add(star);
         elements.add(year);
         elements.add(director);
         elements.add(star);
         elements.add(genre);
+
+
 
         System.out.println("title: " + title);
         System.out.println("year: " + year);
@@ -76,115 +89,55 @@ public class SearchServlet extends HttpServlet {
             }
 
             // Generate a SQL query
-            String queryViews1 = "create view advancedSearch as " +
-                    "select title, m.id from stars_in_movies as sm, " +
-                    "movies as m, stars as s, genres as g, genres_in_movies as gm ";
-
-            queryViews1 +=
-                    "where s.id = sm.starId " +
+            String query = "select m.id, title, year, director, rating, numVotes, " +
+                    "group_concat(distinct s.id, \" \", s.name order by popularity desc) as stars, " +
+                    "group_concat(distinct g.name) as genres, group_concat( distinct g.id) as genreIds " +
+                    "from movies as m left join ratings as r on m.id = r.movieId, " +
+                    "stars as s join topstars as ts on s.id = ts.id , " +
+                    "genres as g, genres_in_movies as gm, stars_in_movies as sm " +
+                    "where sm.starId = s.id " +
                     "and sm.movieId = m.id " +
-                    "and gm.movieId = m.id " +
+                    "and m.id = gm.movieId " +
                     "and g.id = gm.genreId ";
 
             if (title.equals("*")) // to activate browse by non alphanumeric
             {
-                queryViews1 += "and title NOT REGEXP '^[A-Za-z0-9\\.,@&\\(\\) \\-]*$'";
+                query += "and title NOT REGEXP '^[A-Za-z0-9\\.,@&\\(\\) \\-]*$' ";
             }
             else if (!title.equals("")) // don't include title in query if it is not used
             {
-                queryViews1 += "and title like ? ";
-                parameters.set(0, 1);
+                if (title.length() == 1)
+                // for searching through alphabet
+                { query += "and title like ? "; parameters.set(0, 1); }
+                // else use full text search
+                else { query += "and match (title) against ( ? IN BOOLEAN MODE) "; parameters.set(0, 1); }
+
             }
 
             if (!year.equals(""))
-            {
-                queryViews1 += "and year = ? ";
-                parameters.set(1, 1);
-            }
+            { query += "and year = ? "; parameters.set(1, 1); }
 
             if (!director.equals(""))
-            {
-                queryViews1 += "and director like ? ";
-                parameters.set(2, 1);
-            }
+            { query += "and director like ? "; parameters.set(2, 1); }
 
             if (!star.equals(""))
-            {
-                queryViews1 += "and s.name like ? ";
-                parameters.set(3, 1);
-            }
+            { query += "and s.name like ? "; parameters.set(3, 1); }
 
             if (!genre.equals(""))
-            {
-                queryViews1 += "and g.id = ? ";
-                parameters.set(4, 1);
-            }
+            { query += "and g.id = ? "; parameters.set(4, 1); }
 
-            queryViews1 += "group by m.id";
+            query += "group by m.id ";
 
-            System.out.println(queryViews1);
+            query += "order by rating DESC, title ";
 
-            String queryViews2 =
-                    "create view actors as  " +
-                    "select distinct s.id as starId, name, m.id, title " +
-                    "from advancedSearch as m, " +
-                    "stars as s, stars_in_movies as sm " +
-                    "where m.id = sm.movieId " +
-                    "and sm.starId = s.id";
+            query += "limit ? ";
+            query += "offset ? ";
 
-            String queryViews3 =
-                    "create view popularity as  " +
-                    "select starId, a.name, a.id, popularity from actors as a, topstars as ts " +
-                    "where a.starId = ts.id " +
-                    "order by popularity desc, a.name ";
+            System.out.println(query);
 
-            String queryViews4 =
-                    "create view starsInMoviesSearch as " +
-                    "select a.id, title, group_concat(name order by popularity DESC, name) as \"stars\",  " +
-                    "group_concat(starId order by popularity DESC, name) as \"starIDs\"  " +
-                    "from popularity as p join advancedSearch as a on p.id = a.id  " +
-                    "group by id ";
-
-            String queryViews5 =
-                    "create view advGenreSearch as " +
-                    "select ss.id, title, stars, starIDs, group_concat(g.name order by g.name) as \"genres\", group_concat(g.id order by g.name) as \"genreIDs\"  " +
-                    "from starsInMoviesSearch as ss, genres as g, genres_in_movies as gm " +
-                    "where g.id = gm.genreId " +
-                    "and ss.id = gm.movieId " +
-                    "group by ss.id ";
-
-            if (!sortTitle.equals("ASC"))
-            {
-                sortTitle = "DESC"; // to prevent SQL injection
-            }
-
-            if (!sortRating.equals("ASC"))
-            {
-                sortRating = "DESC"; // to prevent SQL injection
-            }
-
-            String query =
-                    "select m.id, m.title, director, stars, year, starIDs, genres, genreIDs, rating, numVotes " +
-                    "from movies as m, advGenreSearch as ag left join ratings on ratings.movieId = ag.id " +
-                    "where m.id = ag.id " +
-                    "order by title " + sortTitle + ", rating " + sortRating + " " +
-                    "limit ? " +
-                    "offset ? ";
 
             // Declare our statement
-            PreparedStatement statementDrops1 = dbcon.prepareStatement("drop view if exists advancedSearch");
-            PreparedStatement statementDrops2 = dbcon.prepareStatement("drop view if exists actors");
-            PreparedStatement statementDrops3 = dbcon.prepareStatement("drop view if exists popularity");
-            PreparedStatement statementDrops4 = dbcon.prepareStatement("drop view if exists starsInMoviesSearch");
-            PreparedStatement statementDrops5 = dbcon.prepareStatement("drop view if exists advGenreSearch");
-
             PreparedStatement statement = dbcon.prepareStatement(query);
-
-            statement.setInt(1, Integer.parseInt(records));
-            statement.setInt(2, Integer.parseInt(offset));
-
-
-            PreparedStatement statementViews1 = dbcon.prepareStatement(queryViews1);
 
             System.out.println("Parameters: " + parameters.toString());
 
@@ -193,43 +146,40 @@ public class SearchServlet extends HttpServlet {
             {
                 if (parameters.get(i).equals(1)) {
                     System.out.println("parameters.get(i)  " + parameters.get(i).toString() );
-                    if (i == 1 || i == 4) {
+                    if (i == 1 || i == 4) { // year or genre
                         int temp = Integer.parseInt(elements.get(i));
                         System.out.println("index: " + index);
-                        statementViews1.setInt(index, temp);
+                        statement.setInt(index, temp);
                         index++;
-                    } else if (i == 0)
+                    } else if (i == 0) // title
                     {
-                        statementViews1.setString(index, title + "%");
+                        if (title.length() == 1) // if it's one character long search by x%
+                        {
+                            statement.setString(index, title + "%");
+                            index++;
+                        } else // using full text search
+                            // TODO make sure if small strings are needed in search ex: search "the" in title
+                        {
+                            statement.setString(index,  title + "*");
+                            index++;
+                        }
                     }
                     else
                     {
-                        statementViews1.setString(index, "%" + elements.get(i) + "%");
+                        statement.setString(index, "%" + elements.get(i) + "%");
+                        index++;
                     }
                 }
             }
 
-            PreparedStatement statementViews2 = dbcon.prepareStatement(queryViews2);
-            PreparedStatement statementViews3 = dbcon.prepareStatement(queryViews3);
-            PreparedStatement statementViews4 = dbcon.prepareStatement(queryViews4);
-            PreparedStatement statementViews5 = dbcon.prepareStatement(queryViews5);
+            statement.setInt(index, Integer.parseInt(records));
+            index++;
+            statement.setInt(index, Integer.parseInt(offset));
 
-            statementDrops1.execute();
-            statementDrops2.execute();
-            statementDrops3.execute();
-            statementDrops4.execute();
-            statementDrops5.execute();
-
-            statementViews1.execute();
-            statementViews2.execute();
-            statementViews3.execute();
-            statementViews4.execute();
-            statementViews5.execute();
+            System.out.println(statement.toString());
 
             // Perform the query
             ResultSet rs = statement.executeQuery();
-
-
 
             JsonArray jsonArray = new JsonArray();
             JsonObject jsonParamObject = new JsonObject();
@@ -247,7 +197,7 @@ public class SearchServlet extends HttpServlet {
                 String movie_genres = rs.getString("genres");
                 String movie_genres_id = rs.getString("genreids");
                 String movie_stars = rs.getString("stars");
-                String movie_stars_id = rs.getString("starids");
+//                String movie_stars_id = rs.getString("starids");
                 String movie_rating = rs.getString("rating");
 
                 JsonObject jsonObject = new JsonObject();
@@ -258,7 +208,7 @@ public class SearchServlet extends HttpServlet {
                 jsonObject.addProperty("genres", movie_genres);
                 jsonObject.addProperty("genres_id", movie_genres_id);
                 jsonObject.addProperty("stars", movie_stars);
-                jsonObject.addProperty("stars_id", movie_stars_id);
+//                jsonObject.addProperty("stars_id", movie_stars_id);
                 jsonObject.addProperty("rating", movie_rating);
 
                 jsonArray.add(jsonObject);

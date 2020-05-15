@@ -16,7 +16,7 @@
    
    [PaymentServlet](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-82/blob/master/src/PaymentServlet.java)
    
-   [SearchServlet (sorting does not use '?' parameters but still prevents SQL Injection)](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-82/blob/master/src/SearchServlet.java)
+   [AdvancedSearchServlet (sorting does not use '?' parameters but still prevents SQL Injection)](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-82/blob/master/src/SearchServlet.java)
    
    [SingleMovieServlet](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-82/blob/master/src/SingleMovieServlet.java)
    

@@ -22,14 +22,23 @@
 <body>
 
 <!-- SearchServlet Form -->
-<form id=search_form ACTION="search.html" METHOD="GET">
-    Title: <input name="title" type="TEXT"><br>
-    Year: <input name="year" type="TEXT"><br>
-    Director: <input name="director" type="TEXT"><br>
-    Star: <input name="star" type="TEXT"><br>
-    <input type="submit" VALUE="Search">
+<div>
+    <form ACTION="search.html" METHOD="GET">
+        Title: <input name="title" type="TEXT:">
+        <input type="submit" VALUE="Search">
+    </form>
+    <br><br>
+
+    <form id=search_form ACTION="search.html" METHOD="GET">
+        Title: <input name="title" type="TEXT"><br>
+        Year: <input name="year" type="TEXT"><br>
+        Director: <input name="director" type="TEXT"><br>
+        Star: <input name="star" type="TEXT"><br>
+        <input type="submit" VALUE="Search">
 
 </form>
+
+</div>
 
 <button onclick=location.href="/cs122b-spring20/cart.html" type="button">
     Cart

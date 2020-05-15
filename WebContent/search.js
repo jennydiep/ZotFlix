@@ -9,6 +9,9 @@
  *      3. Populate the data to correct html elements.
  */
 
+let search_form = $("#search_form");
+let full_search_form = $("#full_search_form");
+
 // let page = 0; // page starts at first
 // let numRecords = 10; // default records is 25
 
@@ -28,6 +31,8 @@ function incrementPage()
     {
         result += "&offset=" + offset;
     }
+    console.log("page number: " + offset/records);
+
     let url = window.location.pathname + result;
     url = decodeURIComponent(url);
     return url;
@@ -35,6 +40,7 @@ function incrementPage()
 
 function changeNumRecords(numRecords)
 {
+
     records = numRecords;
     let temp = window.location.search;
     let result = temp.replace(/records=([0-9]+)/i, "records=" + numRecords);
@@ -42,6 +48,8 @@ function changeNumRecords(numRecords)
     {
         result += "&records=" + numRecords;
     }
+
+    console.log("changing number of records per page to " + numRecords);
 
     let url = window.location.pathname + result;
     url = decodeURIComponent(url);
@@ -88,7 +96,7 @@ function handleResult(resultData) {
         document.getElementById("buttonPrev").style.visibility = "visible";
     }
 
-    if (resultData.length < records) // to hide next button on last page
+    if (resultData.length <= records) // to hide next button on last page
     {
         document.getElementById("buttonNext").style.visibility = "hidden";
     }
@@ -96,8 +104,6 @@ function handleResult(resultData) {
     {
         document.getElementById("buttonNext").style.visibility = "visible";
     }
-
-    console.log("handleResult: populating star search info from resultData");
 
     // populate the star info h3
     // find the empty h3 body by id "star_info"
@@ -114,8 +120,18 @@ function handleResult(resultData) {
 
     // Concatenate the html tags with resultData jsonObject to create table rows
     for (let i = 1; i < Math.min(num_records, resultData.length); i++) {
-        let stars = resultData[i]["stars"].split(',');
-        let starsId = resultData[i]["stars_id"].split(',');
+        // temp stars: [name id, name id ...]
+        let tempStars = resultData[i]["stars"].split(',');
+        let stars = [];
+        let starsId = [];
+
+        for (let i = 0; i < tempStars.length; i++)
+        {
+            let temp = tempStars[i].split(" "); // to keep first and last name
+            stars[i] = tempStars[i].substring(tempStars[i].indexOf(' ')+1); // star name
+            starsId[i] = temp[0]; // star id
+        }
+        // let starsId = resultData[i]["stars_id"].split(',');
 
         let genres = resultData[i]["genres"].split(",");
         let genresId = resultData[i]["genres_id"].split(",");
@@ -161,20 +177,13 @@ function formatLinks(ids, names, link)
 {
     let result = "";
     result += "<th>";
-    for (let i = 0; i < Math.min(2, ids.length); i++)
+
+    if (ids.length >= 1) { result += `<a href="${link}${ids[0]}">${names[0]}</a>`; }
+    for (let i = 1; i < Math.min(2, ids.length); i++)
     {
         result +=
-            `<a href="${link}${ids[i]}">${names[i]}, </a>`;
+            `<a href="${link}${ids[i]}">, ${names[i]} </a>`;
     }
-
-    if (ids.length > 2)
-    {
-        result +=
-            `<a href="${link}${ids[2]}">${names[2]// display star_name for the link text without comma
-            }</a>`;
-        result += "</th>";
-    }
-
     return result;
 }
 
@@ -205,10 +214,41 @@ function setSortOption(sortby, option)
 
 
 /**
+ * Submit the form content with POST method
+ * @param formSubmitEvent
+ */
+// function submitSearchForm(formSubmitEvent) {
+//     console.log("submit search form");
+//     /**
+//      * When users click the submit button, the browser will not direct
+//      * users to the url defined in HTML form. Instead, it will call this
+//      * event handler when the event is triggered.
+//      */
+//     formSubmitEvent.preventDefault();
+//
+//     console.log(search_form.serialize());
+//
+//     $.ajax(
+//         "api/search", {
+//             method: "GET",
+//             // Serialize the login form to the data sent by POST request
+//             data: search_form.serialize() + "&offset="+ offset + "&records=" + records + "&genre=" + genre +
+//             "&sortTitle=" + sortTitle + "&sortRating=" + sortRating,
+//             success: handleResult
+//         }
+//     );
+// }
+
+// // Bind the submit action of the form to a handler function
+// search_form.submit(submitSearchForm);
+
+
+
+/**
  * Once this .js is loaded, following scripts will be executed by the browser\
  */
 
-// Get id from URL
+// // Get id from URL
 let title = getParameterByName('title');
 let year = getParameterByName('year');
 let director = getParameterByName('director');
@@ -219,27 +259,15 @@ let offset = getParameterByName("offset");
 let sortTitle = getParameterByName("sortTitle");
 let sortRating = getParameterByName("sortRating");
 
-if (sortTitle == null)
-{
-    sortTitle = "ASC"
-}
-if (sortRating == null)
-{
-    sortRating = "ASC"
-}
-
-if (offset == null)
-{
-    offset = "0"; // default starts of first page
-}
-if (records == null)
-{
-    records = "10"; // default has 10 records
-}
-if (genre == null)
-{
-    genre = "";
-}
+if (title == null) { title = ""; }
+if (year == null) { year = ""; }
+if (director == null ) { director = ""; }
+if (star == null ) { star = ""; }
+if (sortTitle == null) { sortTitle = "ASC"; }
+if (sortRating == null) { sortRating = "ASC"; }
+if (offset == null) { offset = "0"; } // default starts of first page}
+if (records == null) { records = "10"; }// default has 10 records}
+if (genre == null) { genre = ""; }
 
 console.log("title: " + title);
 console.log("year: " + year);
@@ -249,9 +277,14 @@ console.log("genre: " + genre);
 console.log("records: " + records);
 console.log("offset: " + offset);
 
-
-
-// Makes the HTTP GET request and registers on success callback function handleResult
+console.log("api/search?title=" + title + "&year=" +  year + "&director=" + director +"" +
+    "&star=" + star + "&offset="+ offset + "&records=" + records + "&genre=" + genre +
+    "&sortTitle=" + sortTitle + "&sortRating=" + sortRating);
+//
+//
+//
+// // Makes the HTTP GET request and registers on success callback function handleResult
+// // TODO change this to submit form format
 jQuery.ajax({
     dataType: "json",  // Setting return data type
     method: "GET",// Setting request method
@@ -271,3 +304,4 @@ function handleAddCart(movieId)
         url: "api/items" + "?item=" + movieId, // Setting request url, which is mapped by StarsServlet in Stars.java
     });
 }
+

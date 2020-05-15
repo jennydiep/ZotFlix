@@ -21,11 +21,11 @@ function handleStarResult(resultData) {
     let alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
     let htmlAlpha = "";
 
-    htmlAlpha += "<a href='search.html?title=*&year=&director=&star=&genre='> * </a>"
+    htmlAlpha += "<a href='search.html?title=*'> * </a>"
 
     for (let i = 0; i < alphabet.length; i++)
     {
-        htmlAlpha += "<a href='search.html?title=" + alphabet[i] +"&year=&director=&star=&genre=' > " + alphabet[i] + " </a>";
+        htmlAlpha += "<a href='search.html?title=" + alphabet[i] +"'> " + alphabet[i] + " </a>";
     }
 
     starSearchInfoElement.append(htmlAlpha);
@@ -35,7 +35,7 @@ function handleStarResult(resultData) {
     let htmlGenres = "";
     for (let i = 0; i < resultData.length; i++)
     {
-        htmlGenres += "<a href='search.html?title=&year=&director=&star=&genre=" + resultData[i]["genre_id"] + "' > " +
+        htmlGenres += "<a href='search.html?genre=" + resultData[i]["genre_id"] + "' > " +
             resultData[i]["genre_name"] + " </a>";
     }
 
