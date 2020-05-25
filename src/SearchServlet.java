@@ -35,45 +35,41 @@ public class SearchServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         String searchText = request.getParameter("search");
+        searchText = (searchText==null) ? "" : searchText;
+        System.out.println("searchText: " + searchText);
 
         try {
             // Get a connection from dataSource
             Connection dbcon = dataSource.getConnection();
 
-            //  words in search text
-            String[] words = searchText.split(" ");
-
-
-            // for number of works in parameter to do full search
-            String questionMarks = "";
-            for (int i = 0; i < words.length; i++)
-            {
-                questionMarks += "? ";
-            }
-            String query = "select * from movies where match (title) against (" + questionMarks + " IN BOOLEAN MODE);";
+            String query = "select * from movies where match (title) against ( ? IN BOOLEAN MODE) limit 10";
             PreparedStatement statement = dbcon.prepareStatement(query);
 
-            for (int i = 0; i < words.length;)
+            String[] temp = searchText.split(" ");
+            String result = "";
+            for (String word : temp)
             {
-                statement.setString(i+1, words[i] + "*"); // * to match prefix
+                result += " +" + word + "* ";
+                System.out.println("fulltext query: " + result);
             }
+            statement.setString(1,  result);
 
             // Perform the query
-            ResultSet rs = statement.executeQuery(query);
-
+            ResultSet rs = statement.executeQuery();
             JsonArray jsonArray = new JsonArray();
 
             // Iterate through each row of rs
             while (rs.next()) {
-                String star_id = rs.getString("id");
-                String star_name = rs.getString("name");
-                String star_dob = rs.getString("birthYear");
+                String id = rs.getString("id");
+                String title = rs.getString("title");
 
                 // Create a JsonObject based on the data we retrieve from rs
                 JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("star_id", star_id);
-                jsonObject.addProperty("star_name", star_name);
-                jsonObject.addProperty("star_dob", star_dob);
+                jsonObject.addProperty("value", title);
+
+                JsonObject additionalDataJsonObject = new JsonObject();
+                additionalDataJsonObject.addProperty("id", id);
+                jsonObject.add("data", additionalDataJsonObject);
 
                 jsonArray.add(jsonObject);
             }

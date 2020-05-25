@@ -158,9 +158,15 @@ public class AdvancedSearchServlet extends HttpServlet {
                             statement.setString(index, title + "%");
                             index++;
                         } else // using full text search
-                            // TODO make sure if small strings are needed in search ex: search "the" in title
                         {
-                            statement.setString(index,  title + "*");
+                            String[] temp = title.split(" ");
+                            String result = "";
+                            for (String word : temp)
+                            {
+                                result += " +" + word + "* ";
+                                System.out.println("fulltext query: " + result);
+                            }
+                            statement.setString(index,  result);
                             index++;
                         }
                     }
