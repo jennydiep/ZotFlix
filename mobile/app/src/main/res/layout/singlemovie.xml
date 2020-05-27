@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" android:id="@+id/relative">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="42dp" android:id="@+id/title" android:layout_marginTop="55dp"
+            android:layout_alignParentTop="true" android:layout_centerInParent="true"/>
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/year" android:layout_marginTop="66dp"
+            android:layout_below="@+id/title" android:layout_marginLeft="25dp" android:layout_marginRight="25dp"/>
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/director"
+            android:layout_below="@+id/year"
+            android:layout_marginLeft="25dp" android:layout_marginTop="25dp"
+            android:layout_marginStart="25dp" android:layout_marginRight="25dp" android:layout_marginEnd="25dp"
+    />
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/stars"
+            android:layout_below="@+id/director"
+            android:layout_marginTop="25dp" android:layout_marginLeft="25dp" android:layout_marginStart="25dp"
+            android:layout_marginRight="25dp" android:layout_marginEnd="25dp"/>
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/genres" android:layout_marginTop="25dp"
+            android:layout_below="@+id/stars"
+            android:layout_margin="25dp"/>
+</RelativeLayout>

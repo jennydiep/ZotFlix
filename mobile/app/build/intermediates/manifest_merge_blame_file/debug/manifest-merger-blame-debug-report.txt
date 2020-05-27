@@ -1,0 +1,95 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="edu.uci.ics.fabflixmobile"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="14"
+8-->C:\Users\Jenny\CS122B\cs122b-spring20-project1\mobile\app\src\main\AndroidManifest.xml
+9        android:targetSdkVersion="28" />
+9-->C:\Users\Jenny\CS122B\cs122b-spring20-project1\mobile\app\src\main\AndroidManifest.xml
+10    <!-- This line is needed to enable HTTP connection -->
+11    <uses-permission android:name="android.permission.INTERNET" />
+11-->C:\Users\Jenny\CS122B\cs122b-spring20-project1\mobile\app\src\main\AndroidManifest.xml:5:5-66
+11-->C:\Users\Jenny\CS122B\cs122b-spring20-project1\mobile\app\src\main\AndroidManifest.xml:5:22-64
+12
+13    <application
+13-->C:\Users\Jenny\CS122B\cs122b-spring20-project1\mobile\app\src\main\AndroidManifest.xml:6:5-26:19
+14        android:debuggable="true"
+15        android:icon="@mipmap/ic_launcher"
+15-->C:\Users\Jenny\CS122B\cs122b-spring20-project1\mobile\app\src\main\AndroidManifest.xml:7:13-47
+16        android:label="@string/app_name"
+16-->C:\Users\Jenny\CS122B\cs122b-spring20-project1\mobile\app\src\main\AndroidManifest.xml:8:13-45
+17        android:supportsRtl="true"
+17-->C:\Users\Jenny\CS122B\cs122b-spring20-project1\mobile\app\src\main\AndroidManifest.xml:9:13-39
+18        android:testOnly="true"
+19        android:theme="@style/AppTheme"
+19-->C:\Users\Jenny\CS122B\cs122b-spring20-project1\mobile\app\src\main\AndroidManifest.xml:11:13-44
+20        android:usesCleartextTraffic="true" >
+20-->C:\Users\Jenny\CS122B\cs122b-spring20-project1\mobile\app\src\main\AndroidManifest.xml:10:13-48
+21
+22        <!-- Need to define every activity in the AndroidManifest otherwise won't be visible -->
+23        <activity
+23-->C:\Users\Jenny\CS122B\cs122b-spring20-project1\mobile\app\src\main\AndroidManifest.xml:13:9-21:20
+24            android:name="edu.uci.ics.fabflixmobile.Login"
+24-->C:\Users\Jenny\CS122B\cs122b-spring20-project1\mobile\app\src\main\AndroidManifest.xml:14:17-38
+25            android:label="@string/app_name" >
+25-->C:\Users\Jenny\CS122B\cs122b-spring20-project1\mobile\app\src\main\AndroidManifest.xml:15:17-49
+26            <intent-filter>
+26-->C:\Users\Jenny\CS122B\cs122b-spring20-project1\mobile\app\src\main\AndroidManifest.xml:16:13-20:29
+27
+28                <!-- This line sets which activity to be the home page -->
+29                <action android:name="android.intent.action.MAIN" />
+29-->C:\Users\Jenny\CS122B\cs122b-spring20-project1\mobile\app\src\main\AndroidManifest.xml:18:17-68
+29-->C:\Users\Jenny\CS122B\cs122b-spring20-project1\mobile\app\src\main\AndroidManifest.xml:18:25-66
+30
+31                <category android:name="android.intent.category.LAUNCHER" />
+31-->C:\Users\Jenny\CS122B\cs122b-spring20-project1\mobile\app\src\main\AndroidManifest.xml:19:17-76
+31-->C:\Users\Jenny\CS122B\cs122b-spring20-project1\mobile\app\src\main\AndroidManifest.xml:19:27-74
+32            </intent-filter>
+33        </activity>
+34        <activity android:name="edu.uci.ics.fabflixmobile.ListViewActivity" />
+34-->C:\Users\Jenny\CS122B\cs122b-spring20-project1\mobile\app\src\main\AndroidManifest.xml:22:9-63
+34-->C:\Users\Jenny\CS122B\cs122b-spring20-project1\mobile\app\src\main\AndroidManifest.xml:22:19-51
+35        <activity android:name="edu.uci.ics.fabflixmobile.SingleMovieViewActivity" />
+35-->C:\Users\Jenny\CS122B\cs122b-spring20-project1\mobile\app\src\main\AndroidManifest.xml:23:9-70
+35-->C:\Users\Jenny\CS122B\cs122b-spring20-project1\mobile\app\src\main\AndroidManifest.xml:23:19-58
+36        <!-- By default Android supports only HTTPS connection. To enable HTTP, the below line is needed -->
+37        <uses-library
+37-->C:\Users\Jenny\CS122B\cs122b-spring20-project1\mobile\app\src\main\AndroidManifest.xml:25:9-87
+38            android:name="org.apache.http.legacy"
+38-->C:\Users\Jenny\CS122B\cs122b-spring20-project1\mobile\app\src\main\AndroidManifest.xml:25:23-60
+39            android:required="false" />
+39-->C:\Users\Jenny\CS122B\cs122b-spring20-project1\mobile\app\src\main\AndroidManifest.xml:25:61-85
+40
+41        <activity
+41-->[com.google.android.gms:play-services-base:15.0.1] C:\Users\Jenny\.gradle\caches\transforms-2\files-2.1\8044c2de5e49ff621cbe8b0fc04ea73c\play-services-base-15.0.1\AndroidManifest.xml:23:9-26:75
+42            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+42-->[com.google.android.gms:play-services-base:15.0.1] C:\Users\Jenny\.gradle\caches\transforms-2\files-2.1\8044c2de5e49ff621cbe8b0fc04ea73c\play-services-base-15.0.1\AndroidManifest.xml:24:13-79
+43            android:exported="false"
+43-->[com.google.android.gms:play-services-base:15.0.1] C:\Users\Jenny\.gradle\caches\transforms-2\files-2.1\8044c2de5e49ff621cbe8b0fc04ea73c\play-services-base-15.0.1\AndroidManifest.xml:25:13-37
+44            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+44-->[com.google.android.gms:play-services-base:15.0.1] C:\Users\Jenny\.gradle\caches\transforms-2\files-2.1\8044c2de5e49ff621cbe8b0fc04ea73c\play-services-base-15.0.1\AndroidManifest.xml:26:13-72
+45
+46        <meta-data
+46-->[com.google.android.gms:play-services-basement:15.0.1] C:\Users\Jenny\.gradle\caches\transforms-2\files-2.1\1fcdd0fa5d25c72b5392566c7b29e261\play-services-basement-15.0.1\AndroidManifest.xml:23:9-25:69
+47            android:name="com.google.android.gms.version"
+47-->[com.google.android.gms:play-services-basement:15.0.1] C:\Users\Jenny\.gradle\caches\transforms-2\files-2.1\1fcdd0fa5d25c72b5392566c7b29e261\play-services-basement-15.0.1\AndroidManifest.xml:24:13-58
+48            android:value="@integer/google_play_services_version" />
+48-->[com.google.android.gms:play-services-basement:15.0.1] C:\Users\Jenny\.gradle\caches\transforms-2\files-2.1\1fcdd0fa5d25c72b5392566c7b29e261\play-services-basement-15.0.1\AndroidManifest.xml:25:13-66
+49        <meta-data
+49-->[com.android.support:support-v4:26.1.0] C:\Users\Jenny\.gradle\caches\transforms-2\files-2.1\c3e3bef8a3012dd338bddeeb7215406b\support-v4-26.1.0\AndroidManifest.xml:26:9-28:38
+50            android:name="android.support.VERSION"
+50-->[com.android.support:support-v4:26.1.0] C:\Users\Jenny\.gradle\caches\transforms-2\files-2.1\c3e3bef8a3012dd338bddeeb7215406b\support-v4-26.1.0\AndroidManifest.xml:27:13-51
+51            android:value="26.1.0" />
+51-->[com.android.support:support-v4:26.1.0] C:\Users\Jenny\.gradle\caches\transforms-2\files-2.1\c3e3bef8a3012dd338bddeeb7215406b\support-v4-26.1.0\AndroidManifest.xml:28:13-35
+52        <meta-data
+52-->[android.arch.lifecycle:runtime:1.0.0] C:\Users\Jenny\.gradle\caches\transforms-2\files-2.1\21dd583c67d0392d05e5f9ec6b127a8d\runtime-1.0.0\AndroidManifest.xml:25:9-27:47
+53            android:name="android.arch.lifecycle.VERSION"
+53-->[android.arch.lifecycle:runtime:1.0.0] C:\Users\Jenny\.gradle\caches\transforms-2\files-2.1\21dd583c67d0392d05e5f9ec6b127a8d\runtime-1.0.0\AndroidManifest.xml:26:13-58
+54            android:value="27.0.0-SNAPSHOT" />
+54-->[android.arch.lifecycle:runtime:1.0.0] C:\Users\Jenny\.gradle\caches\transforms-2\files-2.1\21dd583c67d0392d05e5f9ec6b127a8d\runtime-1.0.0\AndroidManifest.xml:27:13-44
+55    </application>
+56
+57</manifest>

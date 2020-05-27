@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin">
+
+    <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/searchText" android:hint="Movie Title"/>
+    <ListView
+            android:id="@+id/list"
+            android:layout_width="369dp"
+            android:layout_height="550dp" android:layout_alignTop="@+id/searchText" android:layout_marginTop="65dp">
+    </ListView>
+    <Button
+            android:text="Search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/searchButton" android:layout_toEndOf="@+id/searchText"
+            android:layout_toRightOf="@+id/searchText" android:layout_marginLeft="39dp"
+            android:layout_marginStart="39dp"/>
+    <Button
+            android:text="Next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/nextButton" android:layout_marginTop="10dp"
+            android:layout_marginLeft="192dp"
+            android:layout_marginStart="192dp" android:layout_toEndOf="@+id/prevButton"
+            android:layout_toRightOf="@+id/prevButton" android:layout_below="@+id/list"/>
+    <Button
+            android:text="Prev"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/prevButton" android:layout_marginTop="10dp"
+            android:layout_below="@+id/list"/>
+
+</RelativeLayout>
