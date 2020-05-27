@@ -35,7 +35,7 @@ public class SingleMovieViewActivity extends Activity {
         System.out.println("started single movie page");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.singlemovie);
-        url = "http://ec2-3-18-107-131.us-east-2.compute.amazonaws.com:8080/cs122b-spring20/api/";
+        url = "https://ec2-3-18-107-131.us-east-2.compute.amazonaws.com:8443/cs122b-spring20/api/";
         String[] tempStars = new String[]{};
         movie = new Movie("id", "title",0, "director", tempStars, "genres");
 //        ListView listView = findViewById(R.id.relative);

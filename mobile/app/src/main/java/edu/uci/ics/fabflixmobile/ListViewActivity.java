@@ -42,7 +42,7 @@ public class ListViewActivity extends Activity {
         searchButton = findViewById(R.id.searchButton);
         prevButton = findViewById(R.id.prevButton);
         nextButton = findViewById(R.id.nextButton);
-        url = "http://ec2-3-18-107-131.us-east-2.compute.amazonaws.com:8080/cs122b-spring20/api/";
+        url = "https://ec2-3-18-107-131.us-east-2.compute.amazonaws.com:8443/cs122b-spring20/api/";
 
         ListView listView = findViewById(R.id.list);
         listView.setAdapter(adapter);

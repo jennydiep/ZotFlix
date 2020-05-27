@@ -40,7 +40,7 @@ public class Login extends ActionBarActivity {
          * In Android, localhost is the address of the device or the emulator.
          * To connect to your machine, you need to use the below IP address
          * **/
-        url = "http://ec2-3-18-107-131.us-east-2.compute.amazonaws.com:8080/cs122b-spring20/api/";
+        url = "https://ec2-3-18-107-131.us-east-2.compute.amazonaws.com:8443/cs122b-spring20/api/";
 
         //assign a listener to call a function to handle the user request when clicking a button
         loginButton.setOnClickListener(new View.OnClickListener() {
