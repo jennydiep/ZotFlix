@@ -1,9 +1,9 @@
 ## CS 122B: Fabflix
 
 ### Web Application URL: http://ec2-3-18-107-131.us-east-2.compute.amazonaws.com:8080/cs122b-spring20/
-### Demo Video: https://www.youtube.com/watch?v=3Ifj7hisXYQ
+### Demo Video (cloned repo git log timestamp at 0:40): https://youtu.be/8DuZ8r1wdHE
+fuzzy search was not implemented
 
-### (Did not finish task 7)
 ##
 
 #### Files that contain prepared statements:
