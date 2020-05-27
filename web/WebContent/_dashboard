@@ -1,0 +1,77 @@
+<!-- This page will be redirected from any url if you are not logged in -->
+<!doctype html>
+<html lang="en">
+<head>
+    <meta content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+
+<!--    <link rel="stylesheet" href="styles.css">-->
+
+    <title>Dashboard</title>
+
+</head>
+<body>
+<h2>Dashboard</h2>
+
+<form id="star_form" method="get" action="#">
+    <label><b>Star Name</b></label>
+    <label>
+        <input id="starName" name="starName" placeholder="Enter Star Name" type="text">
+    </label>
+    <br>
+    <label><b>Star Year</b></label>
+    <label>
+        <input id="starYear" name="starYear" placeholder="Enter Star Year" type="text">
+    </label>
+    <br>
+    <input type="submit" value="Add Star">
+</form>
+
+<br><br>
+
+<form id="movie_form" method="get" action="#">
+    <label><b>Movie Title</b></label>
+    <label>
+        <input id="title" name="title" placeholder="Enter Movie Title" type="text">
+    </label>
+    <br>
+    <label><b>Movie Year</b></label>
+    <label>
+        <input id="movieYear" name="movieYear" placeholder="Enter Movie Year" type="text">
+    </label>
+    <br>
+    <label><b>Movie Director</b></label>
+    <label>
+        <input id="director" name="director" placeholder="Enter Director" type="text">
+    </label>
+    <br>
+    <label><b>Star Name</b></label>
+    <label>
+        <input id="starName2" name="starName" placeholder="Enter Star Name" type="text">
+    </label>
+    <br>
+    <label><b>Genre Name</b></label>
+    <label>
+        <input id="genre" name="genre" placeholder="Enter Genre Name" type="text">
+    </label>
+    <br>
+    <input type="submit" value="Add Movie">
+</form>
+
+<h2 id=dash>Access Denied</h2>
+
+<div id="star_form_message"></div>
+
+<br><br>
+
+<h3 id="metadata"></h3>
+
+
+
+<!-- include jQuery-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!-- include our own JS file -->
+<script src="_dashboard.js"></script>
+
+</body>
+</html>
