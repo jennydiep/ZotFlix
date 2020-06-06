@@ -82,7 +82,7 @@ public class AdvancedSearchServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         long startTJ = System.nanoTime();
-        long endTJ = 0; // temporary value
+        long endTJ;
         try {
             // the following few lines are for connection pooling
             // Obtain our environment naming context
@@ -199,7 +199,6 @@ public class AdvancedSearchServlet extends HttpServlet {
 
             // Perform the query
             ResultSet rs = statement.executeQuery();
-            endTJ = System.nanoTime();
 
             JsonArray jsonArray = new JsonArray();
             JsonObject jsonParamObject = new JsonObject();
@@ -241,8 +240,8 @@ public class AdvancedSearchServlet extends HttpServlet {
             // Close all structures
             rs.close();
             statement.close();
-            endTJ = System.nanoTime();
             dbcon.close();
+            endTJ = System.nanoTime();
 
         } catch (Exception e) {
 
@@ -250,7 +249,7 @@ public class AdvancedSearchServlet extends HttpServlet {
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("errorMessage", e.getMessage());
             out.write(jsonObject.toString());
-
+            endTJ = System.nanoTime();
             // set reponse status to 500 (Internal Server Error)
             response.setStatus(500);
         }

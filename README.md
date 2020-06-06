@@ -1,8 +1,5 @@
 ## CS 122B: Fabflix
 
-### Web Application URL: http://ec2-3-18-107-131.us-east-2.compute.amazonaws.com:8080/cs122b-spring20/
-
-
 - # General
     - #### Team#: 82
     
