@@ -41,7 +41,7 @@
     - #### Include the filename/path of all code/configuration files in GitHub of using JDBC Connection Pooling.
         #### 
     
-       [context.xml]
+       [context.xml](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-82/blob/master/web/WebContent/META-INF/context.xml)
     
        [DashBoardServlet](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-82/blob/master/web/src/DashBoardServlet.java)
        
@@ -79,17 +79,38 @@
         use a connection that was already established in the pool of connections.
     
     - #### Explain how Connection Pooling works with two backend SQL.
-    
+        Connection pooling with two backend databases works similar to single database where instead of establishing 
+        new connections it chooses existing connections, however the pools are shared between two databases which
+        speeds up queries since there can be multiple queries at once instead of waiting for one query to finish.
 
 - # Master/Slave
     - #### Include the filename/path of all code/configuration files in GitHub of routing queries to Master/Slave SQL.
+    
+    - config file: [context.xml](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-82/blob/master/web/WebContent/META-INF/context.xml)
+    
+    - master only:  
+    [AddMovieServlet](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-82/blob/master/web/src/AddMovieServlet.java)  
+    [DashBoardServlet](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-82/blob/master/web/src/DashBoardServlet.java)
+    - master/slave:  
+    [LoginServlet](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-82/blob/master/web/src/LoginServlet.java)  
+    [ItemsServlet](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-82/blob/master/web/src/ItemsServlet.java)  
+    [PaymentServlet](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-82/blob/master/web/src/PaymentServlet.java)  
+    [AdvancedSearchServlet](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-82/blob/master/web/src/AdvancedSearchServlet.java)  
+    [SingleMovieServlet](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-82/blob/master/web/src/SingleMovieServlet.java)  
+    [SingleStarServlet](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-82/blob/master/web/src/SingleStarServlet.java)  
+    [GenreServlet](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-82/blob/master/web/src/GenreServlet.java)  
+    [SearchServlet](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-82/blob/master/web/src/SearchServlet.java)  
+    [MetaDataServlet](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-82/blob/master/web/src/MetaDataServlet.java)  
+    [StarsServlet](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-82/blob/master/web/src/StarsServlet.java)  
 
     - #### How read/write requests were routed to Master/Slave SQL?
-    
+        Read request chooses SQL instance that is linked to its session. The SQL instance that is chosen by the session is
+        picked at random (either the slave or master instance, whatever is localhost) while write requests are always from 
+        the master instance.
 
 - # JMeter TS/TJ Time Logs
     - #### Instructions of how to use the `log_processing.*` script to process the JMeter logs.
-
+    
 
 - # JMeter TS/TJ Time Measurement Report
 
