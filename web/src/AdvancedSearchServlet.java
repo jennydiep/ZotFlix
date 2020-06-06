@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
@@ -32,6 +34,7 @@ public class AdvancedSearchServlet extends HttpServlet {
     // Use http GET
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
+        long startTS = System.nanoTime();
 
         // Retrieve parameter "name" from the http request, which refers to the value of <input name="name"> in index.html
         String title = request.getParameter("title");
@@ -78,6 +81,8 @@ public class AdvancedSearchServlet extends HttpServlet {
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
 
+        long startTJ = System.nanoTime();
+        long endTJ = 0; // temporary value
         try {
             // the following few lines are for connection pooling
             // Obtain our environment naming context
@@ -194,6 +199,7 @@ public class AdvancedSearchServlet extends HttpServlet {
 
             // Perform the query
             ResultSet rs = statement.executeQuery();
+            endTJ = System.nanoTime();
 
             JsonArray jsonArray = new JsonArray();
             JsonObject jsonParamObject = new JsonObject();
@@ -235,6 +241,7 @@ public class AdvancedSearchServlet extends HttpServlet {
             // Close all structures
             rs.close();
             statement.close();
+            endTJ = System.nanoTime();
             dbcon.close();
 
         } catch (Exception e) {
@@ -248,5 +255,38 @@ public class AdvancedSearchServlet extends HttpServlet {
             response.setStatus(500);
         }
         out.close();
+        long endTS = System.nanoTime();
+
+        long elapsedTimeTJ = endTJ - startTJ; // elapsed time in nano seconds. Note: print the values in nano seconds
+        long elapsedTimeTS = endTS - startTS;
+        System.out.println(elapsedTimeTJ + "");
+        System.out.println(elapsedTimeTS + "");
+
+        String fileName = "TS.txt";
+        String fileName2 = "TJ.txt";
+
+        String contextPath = getServletContext().getRealPath("/");
+        System.out.println(contextPath);
+        fileHelper(fileName, contextPath, elapsedTimeTS);
+        fileHelper(fileName2, contextPath, elapsedTimeTJ);
+    }
+
+    void fileHelper(String fileName, String contextPath, long time)
+    {
+        try {
+            FileWriter fileWriter = new FileWriter(contextPath + "/" + fileName, true);
+
+            System.out.println(contextPath + "/" + fileName);
+
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            PrintWriter printWriter = new PrintWriter(bufferedWriter);
+
+            printWriter.println(time + "");
+            printWriter.flush();
+            printWriter.close();
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
     }
 }
