@@ -11,7 +11,7 @@
     - #### Project 5 Video Demo Link:
 
     - #### Instruction of deployment:
-        #####If you do not have USER `mytestuser` setup in MySQL, follow the below steps to create it:
+        ##### If you do not have USER `mytestuser` setup in MySQL, follow the below steps to create it:
     
         - login to mysql as a root user 
             ```
