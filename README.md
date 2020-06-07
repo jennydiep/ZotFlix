@@ -5,7 +5,7 @@
     
     - #### Names: Jenny Diep
     
-    - #### Project 5 Video Demo Link:
+    - #### Project 5 Video Demo Link: https://youtu.be/z6-aGuQfyvQ did not finish gcp in time for demo, I will try to finish during late grading period.
 
     - #### Instruction of deployment:
         ##### If you do not have USER `mytestuser` setup in MySQL, follow the below steps to create it:
@@ -122,15 +122,15 @@
 
 | **Single-instance Version Test Plan**          | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
 |------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
-| Case 1: HTTP/1 thread                          | ![](path to image in img/)   | 231                        | 147.11685                           | 146.91967                 | ??           |
-| Case 2: HTTP/10 threads                        | ![](path to image in img/)   | 1649                       | 1481.37576                          | 1481.21719                | naturally with only one databases, when adding more users the queries get slower since they have to wait           |
-| Case 3: HTTPS/10 threads                       | ![](path to image in img/)   | 1794                       | 1482.13113                          | 1481.89844                | ??           |
-| Case 4: HTTP/10 threads/No connection pooling  | ![](path to image in img/)   | 1572                       | 1426.65872                          | 1426.47031                | ??           |
+| Case 1: HTTP/1 thread                          | [1](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-82/blob/master/img/1.png)   | 231                        | 147.11685                           | 146.91967                 | Having only one user means there is no wait time for other users to finish their search query thus explains its speed.           |
+| Case 2: HTTP/10 threads                        | [2](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-82/blob/master/img/2.PNG)   | 1649                       | 1481.37576                          | 1481.21719                | naturally with only one databases, when adding more users the queries get slower since they have to wait for each query to finish.        |
+| Case 3: HTTPS/10 threads                       | [3](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-82/blob/master/img/3.PNG)   | 1794                       | 1482.13113                          | 1481.89844                | I hypothesized that https would be slower since it takes more time due to encryption that https has.          |
+| Case 4: HTTP/10 threads/No connection pooling  | [4](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-82/blob/master/img/4.PNG)   | 1572                       | 1426.65872                          | 1426.47031                | I hypothesized that no connection pooling would have a higher average however I assume connection pooling isn't much faster in single system since you still have to wait for a whole query to finish.           |
 
 | **Scaled Version Test Plan**                   | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
 |------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
-| Case 1: HTTP/1 thread                          | ![](path to image in img/)   | 230                        | 143.42437                           | 143.17355                 | As expected to have the same time as no pooling since if there is only one user tied to one session there are not too many calls to overload the database           |
-| Case 2: HTTP/10 threads                        | ![](path to image in img/)   | 794                        | 696.48106                           | 696.29226                 | ??           |
+| Case 1: HTTP/1 thread                          | [5](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-82/blob/master/img/5.PNG)   | 230                        | 143.42437                           | 143.17355                 | As expected to have the same time as no pooling since if there is only one user tied to one session there are not too many calls to overload the database           |
+| Case 2: HTTP/10 threads                        | [6](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-82/blob/master/img/6.PNG)   | 794                        | 696.48106                           | 696.29226                 | Was expected to be much quicker but was not expected it to be 3x as fast. The logic behind the scaled version being faster is that reads are much faster since calls to the database are offloaded onto the other server.           |
 | Case 3: HTTP/10 threads/No connection pooling  | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
 
 ##
