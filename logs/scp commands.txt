@@ -1,0 +1,11 @@
+master:
+
+scp -i "cs122b-key.pem" ubuntu@ec2-3-16-161-201.us-east-2.compute.amazonaws.com:~/tomcat/webapps/cs122b-spring20/TJ.txt .
+scp -i "cs122b-key.pem" ubuntu@ec2-3-16-161-201.us-east-2.compute.amazonaws.com:~/tomcat/webapps/cs122b-spring20/TS.txt .
+mv TJ.txt TS.txt  /mnt/c/Users/Jenny/CS122B/logs/#/master
+
+slave:
+
+scp -i "cs122b-key.pem" ubuntu@ec2-18-217-103-49.us-east-2.compute.amazonaws.com:~/tomcat/webapps/cs122b-spring20/TJ.txt .
+scp -i "cs122b-key.pem" ubuntu@ec2-18-217-103-49.us-east-2.compute.amazonaws.com:~/tomcat/webapps/cs122b-spring20/TS.txt .
+mv TJ.txt TS.txt  /mnt/c/Users/Jenny/CS122B/cs122b-spring20-project1/logs/#/slave

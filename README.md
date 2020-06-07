@@ -107,7 +107,14 @@
 
 - # JMeter TS/TJ Time Logs
     - #### Instructions of how to use the `log_processing.*` script to process the JMeter logs.
-    
+        log_processing.py prints out the average TS and TJ time
+        
+        Go to set folder ex: .../log/1
+        
+        Run:
+          
+          python3 ../log_processing.py       
+        
 
 - # JMeter TS/TJ Time Measurement Report
 
