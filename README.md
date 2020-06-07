@@ -106,6 +106,8 @@
         the master instance.
 
 - # JMeter TS/TJ Time Logs
+    - ## NOTE: I did not finish xml implementation so I am using my own query_load.txt file with movies that are only in the original database
+    - #### another note: single aws instance on 8080 is the same as the load balancer instance.
     - #### Instructions of how to use the `log_processing.*` script to process the JMeter logs.
         log_processing.py prints out the average TS and TJ time
         
@@ -120,15 +122,15 @@
 
 | **Single-instance Version Test Plan**          | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
 |------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
-| Case 1: HTTP/1 thread                          | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
-| Case 2: HTTP/10 threads                        | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
-| Case 3: HTTPS/10 threads                       | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
-| Case 4: HTTP/10 threads/No connection pooling  | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
+| Case 1: HTTP/1 thread                          | ![](path to image in img/)   | 231                        | 147.11685                           | 146.91967                 | ??           |
+| Case 2: HTTP/10 threads                        | ![](path to image in img/)   | 1649                       | 1481.37576                          | 1481.21719                | naturally with only one databases, when adding more users the queries get slower since they have to wait           |
+| Case 3: HTTPS/10 threads                       | ![](path to image in img/)   | 1794                       | 1482.13113                          | 1481.89844                | ??           |
+| Case 4: HTTP/10 threads/No connection pooling  | ![](path to image in img/)   | 1572                       | 1426.65872                          | 1426.47031                | ??           |
 
 | **Scaled Version Test Plan**                   | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
 |------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
-| Case 1: HTTP/1 thread                          | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
-| Case 2: HTTP/10 threads                        | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
+| Case 1: HTTP/1 thread                          | ![](path to image in img/)   | 230                        | 143.42437                           | 143.17355                 | As expected to have the same time as no pooling since if there is only one user tied to one session there are not too many calls to overload the database           |
+| Case 2: HTTP/10 threads                        | ![](path to image in img/)   | 794                        | 696.48106                           | 696.29226                 | ??           |
 | Case 3: HTTP/10 threads/No connection pooling  | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
 
 ##
