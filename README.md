@@ -5,7 +5,7 @@
     
     - #### Names: Jenny Diep
     
-    - #### Project 5 Video Demo Link: https://youtu.be/z6-aGuQfyvQ did not finish gcp in time for demo, I will try to finish during late grading period.
+    - #### Project 5 Video Demo Link: https://youtu.be/gSopbQXfAmE did not finish gcp in time for demo, I will try to finish during late grading period.
 
     - #### Instruction of deployment:
         ##### If you do not have USER `mytestuser` setup in MySQL, follow the below steps to create it:
