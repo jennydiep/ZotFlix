@@ -5,6 +5,8 @@
     
     - #### Names: Jenny Diep
     
+    - #### Project 2 LATE Video Demo Link: https://youtu.be/U0qVCBLomhs
+    
     - #### Project 5 Video Demo Link: https://youtu.be/gSopbQXfAmE did not finish gcp in time for demo, I will try to finish during late grading period.
 
     - #### Instruction of deployment:
