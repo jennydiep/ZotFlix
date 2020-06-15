@@ -45,6 +45,13 @@ function handleResult(resultData) {
     let starInfoElement = jQuery("#star_info");
     let year = resultData[0]["star_dob"];
 
+    let movieList = jQuery("#movieListBtn");
+
+    let index = resultData.length - 1;
+
+    console.log(resultData[index]["movielist"]);
+    movieList.append( "<button onclick=location.href='/cs122b-spring20/" + resultData[index]["movielist"]  + "'>Movie List</button>");
+
     if (year === null)
     {
         year = "N/A";
@@ -61,15 +68,15 @@ function handleResult(resultData) {
     let starTableBodyElement = jQuery("#movie_table_body");
 
     // Concatenate the html tags with resultData jsonObject to create table rows
-    for (let i = 0; i < Math.min(10, resultData.length); i++) {
+    for (let i = 0; i < Math.min(10, resultData.length - 1); i++) {
         let rowHTML = "";
         rowHTML += "<tr>";
         rowHTML +=
-        "<th>" +
-        '<a href="single-movie.html?id=' + resultData[i]["movie_id"] + '">'
-        + resultData[i]["movie_title"] +
-        '</a>' +
-        "</th>";
+            "<th>" +
+            '<a href="single-movie.html?id=' + resultData[i]["movie_id"] + '">'
+            + resultData[i]["movie_title"] +
+            '</a>' +
+            "</th>";
         rowHTML += "<th>" + resultData[i]["movie_year"] + "</th>";
         rowHTML += "<th>" + resultData[i]["movie_director"] + "</th>";
         rowHTML += "</tr>";

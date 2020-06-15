@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -90,11 +91,19 @@ public class SingleStarServlet extends HttpServlet {
 
 				jsonArray.add(jsonObject);
 			}
-			
-            // write JSON string to output
-            out.write(jsonArray.toString());
-            // set response status to 200 (OK)
-            response.setStatus(200);
+
+			// getting url to return to movielist search
+			JsonObject jsonObjectURL = new JsonObject();
+			HttpSession session = request.getSession();
+			String url = (String) session.getAttribute("movielist");
+			System.out.println(url);
+			jsonObjectURL.addProperty("movielist", url);
+			jsonArray.add(jsonObjectURL);
+
+			// write JSON string to output
+			out.write(jsonArray.toString());
+			// set response status to 200 (OK)
+			response.setStatus(200);
 
 			rs.close();
 			statement.close();

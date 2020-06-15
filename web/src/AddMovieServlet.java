@@ -44,7 +44,7 @@ public class AddMovieServlet extends HttpServlet {
             // Obtain our environment naming context
             Context initContext = new InitialContext();
             Context envContext = (Context) initContext.lookup("java:/comp/env");
-            DataSource dataSource = (DataSource) envContext.lookup("jdbc/master");
+            DataSource dataSource = (DataSource) envContext.lookup("jdbc/moviedb");
 
             // Get a connection from dataSource
             Connection dbcon = dataSource.getConnection();

@@ -12,7 +12,11 @@ function handleCartArray(resultDataString) {
     for (let i = 0; i < resultDataString.length; i++) {
         // each item will be in a bullet point
         console.log("cart: " + resultDataString[i]["movieTitle"]);
-        res += "<li>" + resultDataString[i]["movieTitle"] + "</li>";
+        let movieId = '"' + resultDataString[i]["movieId"] + '"';
+        res += "<li>" + resultDataString[i]["movieTitle"] + "  quantity: " + resultDataString[i]["quantity"] + "    $" + resultDataString[i]["price"] +
+            "    <button onclick='handleAddCart(" + movieId + ")'>+</button>  " +
+            "  <button onclick='handleDecreaseItem(" + movieId + ")'>-</button>" +
+            "  <button onclick='handleDeleteItem(" + movieId + ")'>Delete</button>" + "</li>";
     }
     res += "</ul>";
 
@@ -51,3 +55,34 @@ jQuery.ajax({
     url: "api/items", // Setting request url, which is mapped by StarsServlet in Stars.java
     success: handleCartInfo // Setting callback function to handle data returned successfully by the StarsServlet
 });
+
+function handleAddCart(movieId)
+{
+    console.log("handling increasing quantity");
+
+    jQuery.ajax({
+        dataType: "json", // Setting return data type
+        method: "GET", // Setting request method
+        url: "api/items" + "?item=" + movieId, // Setting request url, which is mapped by StarsServlet in Stars.java
+    });
+}
+
+function handleDeleteItem(movieId)
+{
+    console.log("handling deleting item");
+    jQuery.ajax({
+        dataType: "json", // Setting return data type
+        method: "GET", // Setting request method
+        url: "api/deleteitem" + "?item=" + movieId, // Setting request url, which is mapped by StarsServlet in Stars.java
+    });
+}
+
+function handleDecreaseItem(movieId)
+{
+    console.log("handling decreasing item");
+    jQuery.ajax({
+        dataType: "json", // Setting return data type
+        method: "GET", // Setting request method
+        url: "api/decreaseitem" + "?item=" + movieId, // Setting request url, which is mapped by StarsServlet in Stars.java
+    });
+}

@@ -1,25 +1,63 @@
-let login_form = $("#payment_form");
+let payment_form = $("#payment_form");
+let totalPrice = 0;
+let movies = "";
 
-function handlePaymentResult(resultDataString) {
-    let resultDataJson = JSON.parse(resultDataString);
-
+function handlePaymentResult(resultData) {
+    // let resultDataJson = JSON.parse(resultDataString);
     console.log("handle payment response");
-    console.log(resultDataJson);
-    console.log(resultDataJson["status"]);
+    console.log(resultData);
+    console.log(resultData[0]["status"]);
 
-
-
-    // // If login succeeds, it will redirect the user to index.html
-    // if (resultDataJson["status"] === "success") {
-    //     window.location.replace("index.html");
-    // } else {
-    //     // If login fails, the web page will display
-    //     // error messages on <div> with id "login_error_message"
-    //     console.log("show error message");
-    //     console.log(resultDataJson["message"]);
-    //     $("#login_error_message").text(resultDataJson["message"]);
-    // }
+    if (resultData[0]["status"] === "failed")
+    {
+        alert(`Purchase failed`);
+    }
+    else
+    {
+        alert(`Purchase successful\n\n`
+            + movies
+            + "Total: $" + totalPrice);
+    }
+    // make ajax call to insert sale
 }
+
+function handleCartArray(ResultData)
+{
+    for (let i = 0; i < ResultData.length; i++)
+    {
+        totalPrice += ResultData[i]["price"] * ResultData[i]["quantity"];
+        movies += ResultData[i]["movieTitle"] + "    "
+            + ResultData[i]["quantity"] + "    $"
+            + ResultData[i]["price"] + "\n";
+    }
+}
+
+/**
+ * Submit form content with POST method
+ * @param cartEvent
+ */
+function handleCartInfo(cartEvent) {
+    console.log("submit cart form");
+    /**
+     * When users click the submit button, the browser will not direct
+     * users to the url defined in HTML form. Instead, it will call this
+     * event handler when the event is triggered.
+     */
+    // cartEvent.preventDefault();
+    $.ajax("api/items", {
+        method: "GET",
+        url: "api/items",
+        success: handleCartArray
+    });
+
+}
+
+jQuery.ajax({
+    dataType: "json", // Setting return data type
+    method: "GET", // Setting request method
+    url: "api/items", // Setting request url, which is mapped by StarsServlet in Stars.java
+    success: handleCartInfo // Setting callback function to handle data returned successfully by the StarsServlet
+});
 
 /**
  * Submit the form content with POST method
@@ -38,12 +76,12 @@ function submitPaymentForm(formSubmitEvent) {
         "api/payment", {
             method: "POST",
             // Serialize the login form to the data sent by POST request
-            data: login_form.serialize(),
+            data: payment_form.serialize(),
             success: handlePaymentResult
         }
     );
 }
 
 // Bind the submit action of the form to a handler function
-login_form.submit(submitPaymentForm);
+payment_form.submit(submitPaymentForm);
 

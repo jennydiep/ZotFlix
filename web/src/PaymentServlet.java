@@ -30,7 +30,7 @@ public class PaymentServlet extends HttpServlet {
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         response.setContentType("application/json"); // Response mime type
 
@@ -53,9 +53,9 @@ public class PaymentServlet extends HttpServlet {
             Connection dbcon = dataSource.getConnection();
 
             String query = "Select * from creditcards where id = ? " +
-                                " and firstName = ?" +
-                                " and lastName = ? " +
-                                " and expiration = ? ";
+                    " and firstName = ?" +
+                    " and lastName = ? " +
+                    " and expiration = ? ";
 
             // Declare our statement
             PreparedStatement statement = dbcon.prepareStatement(query);
@@ -86,12 +86,14 @@ public class PaymentServlet extends HttpServlet {
             if (rs.next() == false)
             {
                 //                JsonObject jsonObject = new JsonObject();
-                responseJsonObject.addProperty("status", "success");
+                responseJsonObject.addProperty("status", "failed");
             }
             else
             {
-                responseJsonObject.addProperty("status", "failed");
+                responseJsonObject.addProperty("status", "success");
             }
+
+            jsonArray.add(responseJsonObject);
 
             // write JSON string to output
             out.write(jsonArray.toString());
@@ -114,5 +116,8 @@ public class PaymentServlet extends HttpServlet {
         }
         out.close();
 
+    }
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        doGet(request, response);
     }
 }

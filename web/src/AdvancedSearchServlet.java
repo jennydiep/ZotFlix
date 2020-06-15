@@ -47,6 +47,9 @@ public class AdvancedSearchServlet extends HttpServlet {
         String sortTitle = request.getParameter("sortTitle");
         String sortRating = request.getParameter("sortRating");
 
+//        String sort = request.getParameter("sort");
+//        String option = request.getParameter("option");
+//        String option2 = request.getParameter("option2");
 
         title = (title==null) ? "" : title;
         year = (year==null) ? "" : year;
@@ -56,7 +59,10 @@ public class AdvancedSearchServlet extends HttpServlet {
         offset = (offset==null) ? "0" : offset;
         records = (records==null) ? "10" : records;
         sortTitle = (sortTitle==null) ? "ASC" : sortTitle;
-        sortRating = (sortRating==null) ? "ASC" : sortRating;
+        sortRating = (sortRating==null) ? "DESC" : sortRating;
+//        sort = (sort==null) ? "title" : sort;
+//        option = (option==null) ? "ASC" : option;
+//        option2 = (option2==null) ? "ASC" : option2;
 
         ArrayList<String> elements = new ArrayList<String>();
         elements.add(star);
@@ -74,8 +80,8 @@ public class AdvancedSearchServlet extends HttpServlet {
         System.out.println("genre: " + genre);
         System.out.println("records: " + records);
         System.out.println("offset: " + offset);
-        System.out.println("sortTitle: " + sortTitle);
         System.out.println("sortRating: " + sortRating);
+        System.out.println("sortTitle: " + sortTitle);
 
 
         // Output stream to STDOUT
@@ -123,7 +129,10 @@ public class AdvancedSearchServlet extends HttpServlet {
                 // for searching through alphabet
                 { query += "and title like ? "; parameters.set(0, 1); }
                 // else use full text search
-                else { query += "and match (title) against ( ? IN BOOLEAN MODE) "; parameters.set(0, 1); }
+//                else { query += "and match (title) against ( ? IN BOOLEAN MODE) "; parameters.set(0, 1); }
+                // revert to using like for project 2 to work
+                else { query += "and title like ? "; parameters.set(0, 1); }
+
 
             }
 
@@ -141,7 +150,19 @@ public class AdvancedSearchServlet extends HttpServlet {
 
             query += "group by m.id ";
 
-            query += "order by rating DESC, title ";
+            if ((sortRating.equals("ASC") || sortRating.equals("DESC")) && ((sortTitle.equals("ASC") || sortTitle.equals("DESC")) ))
+            {
+                query += "order by rating " + sortRating + ", title " + sortTitle + " ";
+            }
+
+//            if ((option.equals("ASC") || option.equals("DESC")) && ((option2.equals("ASC") || option2.equals("DESC")))) { // to prevent sql injection
+//                // setting sort by option
+//                if (sort.equals("title")) {
+//                    query += "order by rating  "  + rating + ", title " + title + " ";
+//                } else if (sort.equals("rating")) {
+//                    query += "order by rating "  + option + ", title " + option2 + " ";
+//                }
+//            }
 
             query += "limit ? ";
             query += "offset ? ";
@@ -172,14 +193,17 @@ public class AdvancedSearchServlet extends HttpServlet {
                             index++;
                         } else // using full text search
                         {
-                            String[] temp = title.split(" ");
-                            String result = "";
-                            for (String word : temp)
-                            {
-                                result += " +" + word + "* ";
-                                System.out.println("fulltext query: " + result);
-                            }
-                            statement.setString(index,  result);
+                            // commenting out full text search to revert to project 2
+//                            String[] temp = title.split(" ");
+//                            String result = "";
+//                            for (String word : temp)
+//                            {
+//                                result += " +" + word + "* ";
+//                                System.out.println("fulltext query: " + result);
+//                            }
+//                            statement.setString(index,  result);
+//                            index++;
+                            statement.setString(index, "%" + title + "%");
                             index++;
                         }
                     }
@@ -191,6 +215,7 @@ public class AdvancedSearchServlet extends HttpServlet {
                 }
             }
 
+            // set records and offset
             statement.setInt(index, Integer.parseInt(records));
             index++;
             statement.setInt(index, Integer.parseInt(offset));
@@ -243,6 +268,10 @@ public class AdvancedSearchServlet extends HttpServlet {
             dbcon.close();
             endTJ = System.nanoTime();
 
+            // to save to session to return to movie list from single movie page
+            String queryString = request.getQueryString();
+            request.getSession().setAttribute("movielist", "search.html?"  + queryString);
+
         } catch (Exception e) {
 
             // write error message JSON object to output
@@ -258,16 +287,16 @@ public class AdvancedSearchServlet extends HttpServlet {
 
         long elapsedTimeTJ = endTJ - startTJ; // elapsed time in nano seconds. Note: print the values in nano seconds
         long elapsedTimeTS = endTS - startTS;
-        System.out.println(elapsedTimeTJ + "");
-        System.out.println(elapsedTimeTS + "");
+//        System.out.println(elapsedTimeTJ + "");
+//        System.out.println(elapsedTimeTS + "");
 
         String fileName = "TS.txt";
         String fileName2 = "TJ.txt";
 
         String contextPath = getServletContext().getRealPath("/");
-        System.out.println(contextPath);
-        fileHelper(fileName, contextPath, elapsedTimeTS);
-        fileHelper(fileName2, contextPath, elapsedTimeTJ);
+//        System.out.println(contextPath);
+//        fileHelper(fileName, contextPath, elapsedTimeTS);
+//        fileHelper(fileName2, contextPath, elapsedTimeTJ);
     }
 
     void fileHelper(String fileName, String contextPath, long time)

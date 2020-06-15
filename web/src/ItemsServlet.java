@@ -37,9 +37,10 @@ public class ItemsServlet extends HttpServlet {
         response.setContentType("application/json"); // Response mime type
         String item = request.getParameter("item");
         HttpSession session = request.getSession();
-        System.out.println("item: " + item);
+//        System.out.println("item: " + item);
         // get the previous items in a ArrayList
         JsonArray previousItems = (JsonArray) session.getAttribute("previousItems");
+        System.out.println(previousItems);
         PrintWriter out = response.getWriter();
 
         try {
@@ -66,17 +67,16 @@ public class ItemsServlet extends HttpServlet {
 
             if (item != null) // if item is null ignore request
             {
-
-
                 String movieId = rs.getString("id");
                 String movieTitle = rs.getString("title");
-
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("movieId", movieId);
                 jsonObject.addProperty("movieTitle", movieTitle);
+                jsonObject.addProperty("price", 10);
+                jsonObject.addProperty("quantity", 1);
 
 
-                if (previousItems == null) { // item does not exist therefore quantity = 1
+                if (previousItems == null) {
 //                    int quantity = 1;
 //                    jsonObject.addProperty("quantity", quantity);
 
@@ -85,10 +85,34 @@ public class ItemsServlet extends HttpServlet {
 
                     session.setAttribute("previousItems", previousItems);
                 } else {
-                    // prevent corrupted states through sharing under multi-threads
-                    // will only be executed by one thread at a time
-                    synchronized (previousItems) {
-                        previousItems.add(jsonObject);
+                    // check if item exists already then increase quantity
+                    boolean exists = false;
+                    for (int i = 0; i < previousItems.size(); i++)
+                    {
+                        JsonObject jsonObjectMovie = (JsonObject) previousItems.get(i);
+
+                        String temp = (jsonObjectMovie.get("movieId")).toString().replaceAll("\"", "");
+                        System.out.println("movie id: " + temp + " movieId: " + movieId);
+                        if ( movieId.equals(temp))
+                        {
+                            int quantity = Integer.parseInt(String.valueOf(((JsonObject) previousItems.get(i)).get("quantity")));
+                            quantity++;
+//                            JsonObject jsonObjectAddMovie = new JsonObject();
+//                            jsonObject.addProperty("movieId", movieId);
+//                            jsonObject.addProperty("movieTitle", movieTitle);
+//                            jsonObject.addProperty("price", 10);
+//                            jsonObject.addProperty("quantity", quantity);
+                            ((JsonObject) previousItems.get(i)).addProperty("quantity", quantity);
+                            exists = true;
+                            System.out.println("increased quantity");
+                        }
+                    }
+                    if (!exists) { // add item if doesn't exist
+                        // prevent corrupted states through sharing under multi-threads
+                        // will only be executed by one thread at a time
+                        synchronized (previousItems) {
+                            previousItems.add(jsonObject);
+                        }
                     }
                 }
 
@@ -104,15 +128,15 @@ public class ItemsServlet extends HttpServlet {
             dbcon.close();
         } catch (Exception e) {
 
-        // write error message JSON object to output
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("errorMessage", e.getMessage());
-        out.write(jsonObject.toString());
+            // write error message JSON object to output
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("errorMessage", e.getMessage());
+            out.write(jsonObject.toString());
 
-        // set reponse status to 500 (Internal Server Error)
-        response.setStatus(500);
+            // set reponse status to 500 (Internal Server Error)
+            response.setStatus(500);
 
-    }
+        }
         out.close();
 
     }

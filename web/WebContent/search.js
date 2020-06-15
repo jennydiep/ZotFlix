@@ -150,6 +150,8 @@ function handleResult(resultData) {
         rowHTML += "<th>" + resultData[i]["year"] + "</th>";
         rowHTML += "<th>" + resultData[i]["director"] + "</th>";
         let genresHTML = formatLinks(genresId, genres, "search.html?title=&year=&director=&star=&genre=");
+
+        console.log(genres);
         rowHTML += genresHTML;
 
 
@@ -179,7 +181,7 @@ function formatLinks(ids, names, link)
     result += "<th>";
 
     if (ids.length >= 1) { result += `<a href="${link}${ids[0]}">${names[0]}</a>`; }
-    for (let i = 1; i < Math.min(2, ids.length); i++)
+    for (let i = 1; i < Math.min(3, ids.length); i++)
     {
         result +=
             `<a href="${link}${ids[i]}">, ${names[i]} </a>`;
@@ -187,30 +189,93 @@ function formatLinks(ids, names, link)
     return result;
 }
 
-function setSortOption(sortby, option)
+function setSortOption(parameter, option)
 {
     let temp = window.location.search;
-    let re = new RegExp( sortby + "=(ASC|DESC)", 'g');
-    let result = temp.replace(re, sortby + "=" + option);
-
-    if (sortby == "sortTitle")
+    let result;
+    if (option === "ASC")
     {
-        sortTitle = option;
+        result = temp.replace(parameter + "=DESC", parameter + "=ASC");
     }
     else
     {
-        sortRating = option;
+        result = temp.replace(parameter+ "=ASC", parameter + "=DESC");
     }
 
-    if (!result.includes(sortby)) // doesn't have offset then just add it
+    if (!result.includes(option)) // doesn't have offset then just add it
     {
-        result += "&"+ sortby +"=" + option;
+        result += "&" + parameter + "=" + option;
     }
 
-    let url = window.location.pathname + result;
-    url = decodeURIComponent(url);
-    return url;
+    return result;
 }
+
+// function setSortOption(sortby, option)
+// {
+//     let temp = window.location.search;
+//     let re = new RegExp( sortby + "=(ASC|DESC)", 'g');
+//     let result = temp.replace(re, sortby + "=" + option);
+//
+//     if (sortby == "sortTitle")
+//     {
+//         sortTitle = option;
+//     }
+//     else
+//     {
+//         sortRating = option;
+//     }
+//
+//     if (!result.includes(sortby)) // doesn't have offset then just add it
+//     {
+//         result += "&"+ sortby +"=" + option;
+//     }
+//
+//     let url = window.location.pathname + result;
+//     url = decodeURIComponent(url);
+//     return url;
+// }
+
+// function setSort(sort)
+// {
+//     let temp = window.location.search;
+//     let result;
+//     if (sort === "title")
+//     {
+//         result = temp.replace("sort=rating", "sort=title");
+//     }
+//     else
+//     {
+//         result = temp.replace("sort=title", "sort=rating");
+//     }
+//
+//     if (!result.includes(sort)) // doesn't have offset then just add it
+//     {
+//         result += "&sort=" + sort;
+//     }
+//
+//     return result;
+// }
+//
+// function setOption(option)
+// {
+//     let temp = window.location.search;
+//     let result;
+//     if (option === "ASC")
+//     {
+//         result = temp.replace("option=DESC", "option=ASC");
+//     }
+//     else
+//     {
+//         result = temp.replace("option=ASC", "option=DESC");
+//     }
+//
+//     if (!result.includes(option)) // doesn't have offset then just add it
+//     {
+//         result += "&option=" + option;
+//     }
+//
+//     return result;
+// }
 
 
 /**
@@ -256,15 +321,15 @@ let star = getParameterByName('star');
 let genre = getParameterByName("genre");
 let records = getParameterByName("records");
 let offset = getParameterByName("offset");
-let sortTitle = getParameterByName("sortTitle");
 let sortRating = getParameterByName("sortRating");
+let sortTitle = getParameterByName("sortTitle");
 
 if (title == null) { title = ""; }
 if (year == null) { year = ""; }
 if (director == null ) { director = ""; }
 if (star == null ) { star = ""; }
-if (sortTitle == null) { sortTitle = "ASC"; }
-if (sortRating == null) { sortRating = "ASC"; }
+if (sortRating == null) { sortRating = "DESC"; }
+if (sortTitle== null) { sortTitle = "ASC"; }
 if (offset == null) { offset = "0"; } // default starts of first page}
 if (records == null) { records = "10"; }// default has 10 records}
 if (genre == null) { genre = ""; }
@@ -279,7 +344,7 @@ console.log("offset: " + offset);
 
 console.log("api/search?title=" + title + "&year=" +  year + "&director=" + director +"" +
     "&star=" + star + "&offset="+ offset + "&records=" + records + "&genre=" + genre +
-    "&sortTitle=" + sortTitle + "&sortRating=" + sortRating);
+    "&sortRating=" + sortRating + "&sortTitle=" + sortTitle);
 //
 //
 //
@@ -290,13 +355,14 @@ jQuery.ajax({
     method: "GET",// Setting request method
     url: "api/search?title=" + title + "&year=" +  year + "&director=" + director +"" +
         "&star=" + star + "&offset="+ offset + "&records=" + records + "&genre=" + genre +
-        "&sortTitle=" + sortTitle + "&sortRating=" + sortRating, // Setting request url, which is mapped by StarsServlet in Stars.java
+        "&sortRating=" + sortRating + "&sortTitle=" + sortTitle, // Setting request url, which is mapped by StarsServlet in Stars.java
     success: (resultData) => handleResult(resultData) // Setting callback function to handle data returned successfully by the SingleStarServlet
 });
 
 function handleAddCart(movieId)
 {
     console.log("handling add to cart");
+    alert("Movie added to cart");
 
     jQuery.ajax({
         dataType: "json", // Setting return data type
@@ -304,4 +370,6 @@ function handleAddCart(movieId)
         url: "api/items" + "?item=" + movieId, // Setting request url, which is mapped by StarsServlet in Stars.java
     });
 }
+
+
 

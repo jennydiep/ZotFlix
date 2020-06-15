@@ -30,6 +30,13 @@ public class SessionServlet extends HttpServlet {
         responseJsonObject.addProperty("admin", currentUser.getAdmin());
         responseJsonObject.addProperty("sessionID", sessionId);
         responseJsonObject.addProperty("lastAccessTime", new Date(lastAccessTime).toString());
+        if (session.getAttribute("previousItems") == null) {
+            responseJsonObject.addProperty("cart", " ");
+        }
+        else
+        {
+            responseJsonObject.addProperty("cart", session.getAttribute("previousItems").toString());
+        }
 //        responseJsonObject.addProperty("movieList", "/cs122b-spring20/");
         // write all the data into the jsonObject
         response.getWriter().write(responseJsonObject.toString());

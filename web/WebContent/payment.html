@@ -9,26 +9,29 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Checkout</h1>
-    <form ACTION="#" id="payment_form" METHOD="post">
+<h1>Checkout</h1>
 
-    <form>
-        <label for="firstName">First name:</label><br>
-        <input type="text" id="firstName" name="firstName"><br>
+<form id="payment_form" METHOD="post">
+    <label for="firstName">First name:</label><br>
+    <input type="text" id="firstName" name="firstName"><br>
 
-        <label for="lastName">Last name:</label><br>
-        <input type="text" id="lastName" name="lastName"><br>
+    <label for="lastName">Last name:</label><br>
+    <input type="text" id="lastName" name="lastName"><br>
 
-        <label for="ccId">Credit card information:</label><br>
-        <input type="text" id="ccId" name="ccId"><br>
+    <label for="ccId">Credit card information:</label><br>
+    <input type="text" id="ccId" name="ccId"><br>
 
-        <label for="expDate">Expiration Date:</label><br>
-        <input type="text" id="expDate" name="expDate"><br>
+    <label for="expDate">Expiration Date:</label><br>
+    <input type="text" id="expDate" name="expDate"><br>
 
-        <input type="submit" VALUE="Purchase" onclick='alert(`Purchase successful`)'>
+    <input type="submit" VALUE="Purchase">
 
-    </form>
+</form>
 
+<!-- include jQuery-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!-- include our own JS file -->
+<script src="payment.js"></script>
 
 </body>
 </html>

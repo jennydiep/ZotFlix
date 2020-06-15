@@ -43,6 +43,12 @@ function handleResult(resultData) {
     // populate the movie info h3
     // find the empty h3 body by id "movie_info"
     let movieInfoElement = jQuery("#movie_info");
+    let movieList = jQuery("#movieListBtn");
+
+    let index = resultData.length -1;
+
+    console.log(resultData[index]["movielist"]);
+    movieList.append( "<button onclick=location.href='/cs122b-spring20/" + resultData[index]["movielist"]  + "'>Movie List</button>");
 
     // append two html <p> created to the h3 body, which will refresh the page
     movieInfoElement.append("<h1>Movie Title: " + resultData[0][0]["title"] + "</h1>" +
@@ -73,9 +79,9 @@ function handleResult(resultData) {
     {
         HTMLstars +=
             "<p>" +
-                '<a href="single-star.html?id=' + starsArray[i]["star_id"] + '">' +
-                    starsArray[i]["star_name"] +
-                '</a>' +
+            '<a href="single-star.html?id=' + starsArray[i]["star_id"] + '">' +
+            starsArray[i]["star_name"] +
+            '</a>' +
             "</p>";
     }
     movieInfoElement.append(HTMLstars);
@@ -87,7 +93,12 @@ function handleResult(resultData) {
     let genresArray = resultData[1];
     for (let i = 0; i < genresArray.length; i++)
     {
-        HTMLgenres += "<p>" + genresArray[i]["genre_name"] + "</p>";
+        // HTMLgenres += "<p>" + genresArray[i]["genre_name"] + "</p>";
+        HTMLgenres += "<p>" +
+            '<a href="search.html?genre=' + genresArray[i]["genre_id"] + '">' +
+            genresArray[i]["genre_name"] +
+            '</a>' +
+            "</p>";
     }
     movieInfoElement.append(HTMLgenres);
 
@@ -117,6 +128,7 @@ jQuery.ajax({
 
 function handleAddCart(movieId) {
     console.log("handling add to cart");
+    alert("Movie added to cart");
 
     jQuery.ajax({
         dataType: "json", // Setting return data type
